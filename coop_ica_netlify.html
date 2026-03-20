@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ระบบประเมินชั้นคุณภาพการควบคุมภายในสหกรณ์ · กรมส่งเสริมสหกรณ์</title>
+<style>
+/* ── System font stack ที่รองรับภาษาไทยทุก OS ── */
+:root {
+  --ink:       #0d1b2e;
+  --ink-mid:   #1c3557;
+  --ink-soft:  #2a4d7a;
+  --gold:      #c8922a;
+  --gold-pale: #f5e0b0;
+  --gold-glow: #ffd166;
+  --jade:      #1a6b55;
+  --jade-lt:   #2d9970;
+  --ruby:      #b52c2c;
+  --amber:     #c96a00;
+  --sky:       #1d6fa4;
+  --mist:      #f0f4f8;
+  --mist2:     #e4ecf4;
+  --paper:     #fafbfc;
+  --line:      #d6e0ea;
+  --text:      #1e2d40;
+  --text-soft: #4a6278;
+  --text-muted:#7a94aa;
+  --white:     #ffffff;
+  --r-sm: 8px;
+  --r:    14px;
+  --r-lg: 20px;
+  --shadow-sm: 0 2px 8px rgba(13,27,46,.08);
+  --shadow:    0 4px 20px rgba(13,27,46,.12);
+  --shadow-lg: 0 8px 40px rgba(13,27,46,.18);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Sarabun', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', 'Tahoma', sans-serif;
+  background: var(--ink);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════ SHELL ══ */
+.shell {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════ SIDEBAR ══ */
+.sidebar {
+  background: linear-gradient(180deg, var(--ink) 0%, var(--ink-mid) 100%);
+  border-right: 1px solid rgba(200,146,42,.18);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar-brand {
+  padding: 24px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,.07);
+}
+.brand-logo {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-glow) 100%);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  margin-bottom: 10px;
+  box-shadow: 0 4px 12px rgba(200,146,42,.4);
+}
+.brand-title {
+  font-family: 'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif, 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif;
+  font-size: 13px; font-weight: 700;
+  color: var(--white);
+  line-height: 1.4;
+}
+.brand-sub { font-size: 11px; color: rgba(255,255,255,.45); margin-top: 2px; }
+
+/* nav */
+.sidebar-nav { padding: 12px 12px; flex: 1; }
+.nav-section-label {
+  font-size: 10px; font-weight: 700;
+  color: rgba(255,255,255,.3);
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: 10px 8px 6px;
+}
+.nav-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  cursor: pointer;
+  color: rgba(255,255,255,.55);
+  font-size: 13px; font-weight: 500;
+  transition: all .2s;
+  margin-bottom: 2px;
+  position: relative;
+}
+.nav-item:hover { background: rgba(255,255,255,.07); color: rgba(255,255,255,.9); }
+.nav-item.active {
+  background: rgba(200,146,42,.18);
+  color: var(--gold-glow);
+  font-weight: 700;
+}
+.nav-item.active::before {
+  content: '';
+  position: absolute; left: 0; top: 20%; bottom: 20%;
+  width: 3px; border-radius: 2px;
+  background: var(--gold-glow);
+}
+.nav-icon { font-size: 16px; flex-shrink: 0; }
+.nav-badge {
+  margin-left: auto;
+  background: rgba(200,146,42,.3);
+  color: var(--gold-glow);
+  font-size: 10px; font-weight: 700;
+  padding: 2px 7px; border-radius: 10px;
+}
+
+/* coop list in sidebar */
+.coop-list { padding: 0 12px 12px; }
+.coop-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: all .18s;
+  border: 1.5px solid transparent;
+}
+.coop-item:hover { background: rgba(255,255,255,.05); }
+.coop-item.active-coop {
+  background: rgba(255,255,255,.09);
+  border-color: rgba(200,146,42,.3);
+}
+.coop-avatar {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+  background: rgba(255,255,255,.08);
+}
+.coop-info { flex: 1; min-width: 0; }
+.coop-name {
+  font-size: 12px; font-weight: 600;
+  color: rgba(255,255,255,.8);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.coop-score-pill {
+  font-size: 10px; font-weight: 700;
+  padding: 1px 6px; border-radius: 8px;
+  margin-top: 2px; display: inline-block;
+}
+.coop-del { color: rgba(255,255,255,.2); font-size: 14px; cursor: pointer; padding: 2px 4px; border-radius: 4px; }
+.coop-del:hover { color: var(--ruby); background: rgba(181,44,44,.15); }
+
+.sidebar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+.stat-row {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: rgba(255,255,255,.4);
+  margin-bottom: 4px;
+}
+.stat-val { color: rgba(255,255,255,.7); font-weight: 600; }
+
+/* ═══════════════════════════════════ MAIN ══ */
+.main { background: var(--mist); overflow-y: auto; }
+
+/* topbar */
+.topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 32px;
+  display: flex; align-items: center; gap: 14px;
+  position: sticky; top: 0; z-index: 50;
+  box-shadow: var(--shadow-sm);
+}
+.topbar-title {
+  font-family: 'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif, 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif;
+  font-size: 16px; font-weight: 700; color: var(--ink);
+}
+.topbar-sub { font-size: 12px; color: var(--text-muted); margin-top: 1px; }
+.topbar-actions { margin-left: auto; display: flex; gap: 8px; }
+
+/* ═══════════════════════════════════ VIEWS ══ */
+.view { display: none; padding: 32px; }
+.view.active { display: block; }
+
+/* ═══════════════════════════════════ DASHBOARD ══ */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.kpi-card {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--line);
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::after {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.kpi-card.c-navy::after { background: linear-gradient(90deg, var(--ink-soft), var(--sky)); }
+.kpi-card.c-gold::after  { background: linear-gradient(90deg, var(--gold), var(--gold-glow)); }
+.kpi-card.c-jade::after  { background: linear-gradient(90deg, var(--jade), var(--jade-lt)); }
+.kpi-card.c-ruby::after  { background: linear-gradient(90deg, var(--ruby), #e05555); }
+.kpi-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .06em; }
+.kpi-val   { font-size: 32px; font-weight: 700; color: var(--ink); font-family: 'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif, 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif; margin: 4px 0; }
+.kpi-sub   { font-size: 12px; color: var(--text-soft); }
+
+.section-heading {
+  font-family: 'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif, 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif;
+  font-size: 16px; font-weight: 700; color: var(--ink);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-heading::after {
+  content: ''; flex: 1; height: 1px; background: var(--line);
+}
+
+/* coop table */
+.table-wrap {
+  background: var(--white);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+table { width: 100%; border-collapse: collapse; }
+thead th {
+  background: var(--ink-soft);
+  color: rgba(255,255,255,.9);
+  font-size: 11px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .06em;
+  padding: 12px 16px; text-align: left;
+}
+tbody tr { border-bottom: 1px solid var(--line); transition: background .15s; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:nth-child(odd)  { background: var(--white); }
+tbody tr:nth-child(even) { background: #f4f8fd; }
+tbody tr:hover { background: #e8f1fa !important; }
+tbody td { padding: 12px 16px; font-size: 13px; color: var(--text); }
+.table-actions { display: flex; gap: 6px; }
+
+/* ═══════════════════════════════════ FORM CARD ══ */
+.form-card {
+  background: var(--white);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--line);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+.form-card-head {
+  background: linear-gradient(135deg, #2563b4 0%, #3b82f6 100%);
+  padding: 18px 24px;
+  display: flex; align-items: center; gap: 12px;
+}
+.form-card-head h3 {
+  font-family: 'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif, 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif;
+  font-size: 15px; font-weight: 700; color: var(--white);
+}
+.form-card-head .score-badge {
+  margin-left: auto;
+  background: rgba(255,255,255,.15);
+  color: var(--gold-glow);
+  font-size: 12px; font-weight: 700;
+  padding: 4px 12px; border-radius: 20px;
+}
+.form-card-body { padding: 24px; }
+
+/* step pills */
+.step-track {
+  display: flex; gap: 4px;
+  background: var(--mist2);
+  border-radius: 50px; padding: 5px;
+  margin-bottom: 24px;
+}
+.step-pill {
+  flex: 1; text-align: center;
+  padding: 8px 10px;
+  border-radius: 44px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; transition: all .22s;
+  color: var(--text-muted);
+}
+.step-pill.sp-active {
+  background: #3b82f6;
+  color: var(--white);
+  box-shadow: 0 2px 10px rgba(59,130,246,.30);
+}
+.step-pill.sp-done {
+  color: var(--jade);
+}
+.step-pill.sp-done::after { content: ' ✓'; }
+
+/* info grid */
+.info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.info-grid .full { grid-column: 1/-1; }
+.field-label {
+  font-size: 11px; font-weight: 700; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .05em;
+  display: block; margin-bottom: 5px;
+}
+.field-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: var(--r-sm);
+  font-family: 'Sarabun', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', 'Tahoma', sans-serif;
+  font-size: 14px; color: var(--text);
+  background: var(--paper);
+  outline: none; transition: border-color .18s, box-shadow .18s;
+}
+.field-input:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 3px rgba(29,111,164,.1);
+  background: var(--white);
+}
+.type-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 8px;
+  margin-top: 6px;
+}
+.type-btn {
+  padding: 10px 6px; border-radius: var(--r-sm);
+  border: 1.5px solid var(--line);
+  text-align: center; cursor: pointer;
+  font-size: 12px; font-family: 'Sarabun', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', 'Tahoma', sans-serif;
+  color: var(--text-soft); transition: all .18s; background: var(--white);
+}
+.type-btn:hover { border-color: var(--sky); color: var(--sky); }
+.type-btn.sel { background: #3b82f6; border-color: #2563b4; color: var(--white); font-weight: 700; box-shadow: 0 2px 10px rgba(59,130,246,.30); }
+.type-btn .ti { font-size: 18px; display: block; margin-bottom: 3px; }
+
+/* q groups */
+.q-group { margin-bottom: 16px; }
+.q-group-title {
+  font-size: 13px; font-weight: 700; color: var(--ink-soft);
+  background: var(--mist2);
+  padding: 9px 14px; border-radius: 7px;
+  margin-bottom: 2px;
+  border-left: 4px solid var(--sky);
+  display: flex; align-items: center; gap: 6px;
+}
+.q-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--mist);
+  transition: background .12s;
+}
+.q-row:hover { background: var(--mist); }
+.q-row:last-child { border-bottom: none; }
+.q-text { flex: 1; font-size: 13px; color: var(--text); line-height: 1.5; }
+
+/* radio tri-state */
+.tri-group { display: flex; gap: 4px; flex-shrink: 0; }
+/* ── ปุ่มสามตัวเลือก ── */
+.tri-group { display: flex; gap: 4px; flex-shrink: 0; }
+
+.tri-yes, .tri-no, .tri-na {
+  padding: 3px 11px;
+  border-radius: 50px;
+  font-size: 11px; font-weight: 600;
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: 'Sarabun', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', 'Tahoma', sans-serif;
+  white-space: nowrap;
+  outline: none;
+  border: 1.5px solid transparent;
+  letter-spacing: .01em;
+}
+
+/* ── ใช่ ── */
+.tri-yes {
+  background: transparent;
+  border-color: #86efac;
+  color: #16a34a;
+}
+.tri-yes:hover { background: #dcfce7; border-color: #4ade80; }
+.tri-yes.t-yes {
+  background: #16a34a;
+  border-color: #15803d;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(22,163,74,.30);
+}
+
+/* ── ไม่ใช่ ── */
+.tri-no {
+  background: transparent;
+  border-color: #fca5a5;
+  color: #dc2626;
+}
+.tri-no:hover  { background: #fee2e2; border-color: #f87171; }
+.tri-no.t-no  {
+  background: #dc2626;
+  border-color: #b91c1c;
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(220,38,38,.28);
+}
+
+/* ── ไม่มี ── */
+.tri-na {
+  background: transparent;
+  border-color: #cbd5e1;
+  color: #94a3b8;
+}
+.tri-na:hover  { background: var(--mist2); border-color: #94a3b8; color: #64748b; }
+.tri-na.t-na  {
+  background: #94a3b8;
+  border-color: #64748b;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(148,163,184,.30);
+}
+
+/* score 0-3 */
+.score-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--mist);
+  transition: background .12s;
+}
+.score-row:hover { background: var(--mist); }
+.score-row:last-child { border-bottom: none; }
+.score-text { flex: 1; font-size: 13px; color: var(--text); line-height: 1.5; padding-top: 3px; }
+.score-group { display: flex; gap: 3px; flex-shrink: 0; }
+.s-btn {
+  width: 34px; height: 34px;
+  border-radius: 7px;
+  border: 1.5px solid var(--line);
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all .14s;
+  font-family: 'Sarabun', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', 'Tahoma', sans-serif;
+  background: var(--white); color: var(--text-muted);
+  display: flex; align-items: center; justify-content: center;
+}
+.s-btn:hover { transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.s-btn.s0.on { background: #fef2f2; border-color: #fca5a5; color: #b91c1c; }
+.s-btn.s1.on { background: #fff7ed; border-color: #fdba74; color: #c2410c; }
+.s-btn.s2.on { background: #fefce8; border-color: #fde047; color: #a16207; }
+.s-btn.s3.on { background: #f0fdf4; border-color: #86efac; color: #15803d; }
+.s-btn.sna   { width: auto; padding: 0 9px; font-size: 10px; }
+.s-btn.sna.on { background: var(--mist2); border-color: var(--line); color: var(--text-muted); }
+
+/* legend */
+.score-legend {
+  display: flex; gap: 12px; flex-wrap: wrap;
+  padding: 10px 14px;
+  background: var(--mist); border-radius: var(--r-sm);
+  margin-bottom: 14px; font-size: 11px; color: var(--text-soft);
+}
+.leg { display: flex; align-items: center; gap: 5px; }
+.leg-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+/* sub tabs */
+.sub-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 16px; }
+.sub-tab {
+  padding: 6px 14px; border-radius: 50px;
+  font-size: 12px; font-weight: 600;
+  cursor: pointer; border: 1.5px solid var(--line);
+  background: var(--white); color: var(--text-soft);
+  transition: all .16s; font-family: 'Sarabun', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', 'Tahoma', sans-serif;
+}
+.sub-tab:hover { border-color: var(--sky); color: var(--sky); }
+.sub-tab.st-active { background: var(--ink); border-color: var(--ink); color: var(--white); }
+.sub-tab.st-done   { border-color: var(--jade); color: var(--jade); }
+.sub-tab.st-done::after { content: ' ✓'; font-size: 10px; }
+.subsec { display: none; }
+.subsec.active { display: block; }
+
+/* progress */
+.sec-progress {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 14px; background: var(--mist);
+  border-radius: var(--r-sm); margin-bottom: 10px;
+}
+.prog-label { font-size: 12px; color: var(--text-soft); font-weight: 600; }
+.prog-bar { flex: 1; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 3px; transition: width .4s ease; background: linear-gradient(90deg, var(--sky) 0%, var(--jade-lt) 100%); }
+.prog-val { font-size: 12px; font-weight: 700; color: var(--ink); min-width: 110px; text-align: right; }
+
+/* ═══════════════════════════════════ RESULT ══ */
+.result-hero {
+  background: linear-gradient(135deg, var(--ink) 0%, var(--ink-soft) 60%, var(--sky) 100%);
+  border-radius: var(--r-lg);
+  padding: 32px;
+  color: var(--white);
+  text-align: center;
+  margin-bottom: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.result-hero::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.result-hero h3 { font-size: 13px; opacity: .65; margin-bottom: 8px; font-family: 'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif; }
+.hero-score { font-family: 'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif, 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif; font-size: 72px; font-weight: 700; color: var(--gold-glow); line-height: 1; }
+.hero-level { display: inline-block; padding: 6px 24px; border-radius: 50px; font-size: 18px; font-weight: 700; margin: 12px 0 6px; background: rgba(255,255,255,.15); }
+.hero-desc  { font-size: 13px; opacity: .65; max-width: 380px; margin: 0 auto; line-height: 1.6; }
+
+.result-parts {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; margin-bottom: 24px;
+}
+.rp-card {
+  background: var(--white); border-radius: var(--r);
+  padding: 18px; border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+.rp-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: .05em; }
+.rp-score { font-family: 'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif, 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif; font-size: 30px; font-weight: 700; color: var(--ink); }
+.rp-bar { height: 6px; background: var(--line); border-radius: 3px; margin: 8px 0 6px; overflow: hidden; }
+.rp-fill { height: 100%; border-radius: 3px; transition: width .5s ease; }
+.rp-level { font-size: 12px; font-weight: 700; display: inline-block; padding: 2px 10px; border-radius: 10px; }
+
+/* level colours */
+.lv-excellent { background: #dcfce7; color: #15803d; }
+.lv-good      { background: #dbeafe; color: #1d4ed8; }
+.lv-ok        { background: #fef9c3; color: #92400e; }
+.lv-improve   { background: #ffedd5; color: #c2410c; }
+.lv-fix       { background: #fee2e2; color: #991b1b; }
+
+/* pill colour by score */
+.pill-score {
+  font-size: 10px; font-weight: 700;
+  padding: 2px 8px; border-radius: 8px;
+  display: inline-block;
+}
+
+/* RQ2 report */
+.rq2-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.rq2-table th {
+  background: var(--ink); color: rgba(255,255,255,.85);
+  padding: 10px 14px; text-align: left; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .05em;
+}
+.rq2-table td { padding: 9px 14px; border-bottom: 1px solid var(--line); }
+.rq2-table tr:last-child td { border-bottom: none; }
+.rq2-table tr:nth-child(even) td { background: var(--mist); }
+.rq2-total td { background: var(--ink) !important; color: white; font-weight: 700; font-size: 14px; }
+
+/* ═══════════════════════════════════ BUTTONS ══ */
+.btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 10px 22px; border-radius: 50px;
+  font-family: 'Sarabun', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', 'Tahoma', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; border: none; transition: all .18s;
+}
+.btn-ink {
+  background: var(--ink); color: var(--white);
+  box-shadow: 0 3px 12px rgba(13,27,46,.25);
+}
+.btn-ink:hover { background: var(--ink-soft); transform: translateY(-1px); }
+.btn-blue {
+  background: #2563b4; color: var(--white);
+  box-shadow: 0 3px 12px rgba(37,99,180,.30);
+}
+.btn-blue:hover { background: #1d56a0; transform: translateY(-1px); box-shadow: 0 5px 16px rgba(37,99,180,.40); }
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-glow) 100%);
+  color: var(--ink);
+  box-shadow: 0 3px 14px rgba(200,146,42,.35);
+}
+.btn-gold:hover { transform: translateY(-1px); box-shadow: 0 5px 18px rgba(200,146,42,.45); }
+.btn-jade {
+  background: var(--jade); color: var(--white);
+  box-shadow: 0 3px 12px rgba(26,107,85,.25);
+}
+.btn-jade:hover { background: var(--jade-lt); transform: translateY(-1px); }
+.btn-ghost {
+  background: var(--white); color: var(--text-soft);
+  border: 1.5px solid var(--line);
+}
+.btn-ghost:hover { background: var(--mist); border-color: var(--sky); color: var(--sky); }
+.btn-ruby {
+  background: #fee2e2; color: var(--ruby);
+  border: 1.5px solid #fca5a5;
+}
+.btn-ruby:hover { background: var(--ruby); color: white; }
+.btn-sm { padding: 6px 14px; font-size: 12px; }
+.btn-row { display: flex; gap: 8px; justify-content: flex-end; padding-top: 16px; border-top: 1px solid var(--line); margin-top: 8px; }
+.notice {
+  padding: 8px 14px; border-radius: 6px;
+  font-size: 12px; color: var(--amber);
+  background: #fff7ed; border: 1px solid #fdba74;
+  margin-bottom: 10px;
+}
+
+/* ═══════════════════════════════════ EMPTY STATE ══ */
+.empty-state {
+  text-align: center; padding: 64px 24px;
+  color: var(--text-muted);
+}
+.empty-icon { font-size: 48px; margin-bottom: 12px; opacity: .5; }
+.empty-title { font-size: 16px; font-weight: 600; color: var(--text-soft); margin-bottom: 6px; }
+.empty-desc  { font-size: 13px; }
+
+/* ═══════════════════════════════════ MODAL ══ */
+.modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(13,27,46,.6); backdrop-filter: blur(4px);
+  z-index: 200; align-items: center; justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+.modal-box {
+  background: var(--white); border-radius: var(--r-lg);
+  box-shadow: var(--shadow-lg);
+  max-width: 480px; width: 90%;
+  padding: 28px; animation: popIn .2s ease;
+}
+@keyframes popIn { from { transform: scale(.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.modal-title { font-family: 'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif, 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 16px; }
+
+/* ═══════════════════════════════════ PRINT ══ */
+@media print {
+  .shell { display: block; }
+  .sidebar, .topbar, .btn-row, .step-track, .sub-tabs, .topbar-actions { display: none !important; }
+  .view { display: block !important; padding: 0; }
+  .form-card { box-shadow: none; border: 1px solid #ccc; }
+  .result-hero { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+}
+
+/* ═══════════════════════════════════ RESPONSIVE ══ */
+@media (max-width: 900px) {
+  .shell { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .dashboard-grid { grid-template-columns: 1fr 1fr; }
+  .result-parts { grid-template-columns: 1fr; }
+  .info-grid { grid-template-columns: 1fr; }
+  .type-grid  { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ MODAL (confirm) ═══════ -->
+<div class="modal-overlay" id="modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-title">ยืนยันการดำเนินการ</div>
+    <div id="modal-body" style="font-size:13px;color:var(--text-soft);margin-bottom:20px;line-height:1.6;"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">ยกเลิก</button>
+      <button class="btn btn-ruby btn-sm" id="modal-confirm">ยืนยัน</button>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+
+<!-- ═══════════════════════════════════ SIDEBAR ═══════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-logo">🌾</div>
+    <div class="brand-title">ระบบประเมินชั้นคุณภาพ<br>การควบคุมภายในสหกรณ์</div>
+    <div class="brand-sub">กรมส่งเสริมสหกรณ์ · ใช้เกณฑ์กรมตรวจบัญชีสหกรณ์</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section-label">เมนูหลัก</div>
+    <div class="nav-item active" id="nav-dash" onclick="showView('dash')">
+      <span class="nav-icon">📊</span> แดชบอร์ดรวม
+    </div>
+    <div class="nav-item" id="nav-form" onclick="showView('form')">
+      <span class="nav-icon">✏️</span> กรอก/ประเมิน
+    </div>
+    <div class="nav-item" id="nav-result" onclick="showView('result')">
+      <span class="nav-icon">📋</span> ผลการประเมิน
+    </div>
+    <div class="nav-item" id="nav-report" onclick="showView('report')">
+      <span class="nav-icon">🖨️</span> รายงานผลการประเมิน
+    </div>
+
+    <div class="nav-section-label" style="margin-top:16px;">สหกรณ์ที่รับผิดชอบ</div>
+    <div class="nav-item" style="cursor:pointer;" onclick="startNew()">
+      <span class="nav-icon">➕</span> เพิ่มสหกรณ์ใหม่
+      <span class="nav-badge">+</span>
+    </div>
+  </div>
+
+  <div class="coop-list" id="sidebar-coop-list"></div>
+
+  <div class="sidebar-footer">
+    <div class="stat-row"><span>สหกรณ์ที่รับผิดชอบ</span><span class="stat-val" id="stat-total">0</span></div>
+    <div class="stat-row"><span>คะแนนเฉลี่ยรวม</span><span class="stat-val" id="stat-avg">-</span></div>
+    <div class="stat-row"><span>ระดับดีมาก</span><span class="stat-val" id="stat-excellent">0</span></div>
+  </div>
+</aside>
+
+<!-- ═══════════════════════════════════ MAIN ═══════════════════════ -->
+<main class="main">
+
+  <!-- topbar -->
+  <div class="topbar">
+    <div>
+      <div class="topbar-title" id="topbar-title">แดชบอร์ดรวม</div>
+      <div class="topbar-sub" id="topbar-sub">ภาพรวมสหกรณ์ที่รับผิดชอบทั้งหมด</div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost btn-sm" onclick="exportAllCSV()">📄 Export CSV</button>
+      <button class="btn btn-ghost btn-sm" onclick="exportAllGSheet()">📊 Google Sheets</button>
+      <button class="btn btn-ghost btn-sm" onclick="exportJSON()">💾 Backup JSON</button>
+      <button class="btn btn-ghost btn-sm" onclick="importClick()">📥 Import JSON</button>
+      <input type="file" id="import-file" accept=".json" style="display:none" onchange="importJSON(event)">
+      <button class="btn btn-blue btn-sm" onclick="startNew()">➕ เพิ่มสหกรณ์</button>
+    </div>
+  </div>
+
+  <!-- ═══ VIEW: DASHBOARD ═══ -->
+  <div class="view active" id="view-dash">
+    <div class="dashboard-grid">
+      <div class="kpi-card c-navy">
+        <div class="kpi-label">สหกรณ์ที่รับผิดชอบ</div>
+        <div class="kpi-val" id="kpi-total">0</div>
+        <div class="kpi-sub">รายการที่บันทึกไว้ในระบบ</div>
+      </div>
+      <div class="kpi-card c-gold">
+        <div class="kpi-label">คะแนนเฉลี่ย</div>
+        <div class="kpi-val" id="kpi-avg">-</div>
+        <div class="kpi-sub">ภาพรวมทุกสหกรณ์</div>
+      </div>
+      <div class="kpi-card c-jade">
+        <div class="kpi-label">ระดับดีมาก/ดี</div>
+        <div class="kpi-val" id="kpi-good">0</div>
+        <div class="kpi-sub">สหกรณ์คะแนน ≥ 0.80</div>
+      </div>
+      <div class="kpi-card c-ruby">
+        <div class="kpi-label">ต้องแก้ไข/ปรับปรุง</div>
+        <div class="kpi-val" id="kpi-bad">0</div>
+        <div class="kpi-sub">สหกรณ์คะแนน ≤ 0.60</div>
+      </div>
+    </div>
+
+    <div class="section-heading">📋 รายการสหกรณ์ที่รับผิดชอบทั้งหมด</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ชื่อสหกรณ์ / กลุ่มเกษตรกร</th>
+            <th>ประเภท</th>
+            <th>อำเภอ/เขต</th>
+            <th>สำนักงานสหกรณ์จังหวัด/พื้นที่</th>
+            <th>ปีบัญชี</th>
+            <th style="text-align:center">ส่วนที่ 1</th>
+            <th style="text-align:center">ส่วนที่ 2</th>
+            <th style="text-align:center">ส่วนที่ 3</th>
+            <th style="text-align:center">ส่วนที่ 4</th>
+            <th style="text-align:center">ภาพรวม</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="dash-table-body"></tbody>
+      </table>
+      <div id="dash-empty" class="empty-state" style="display:none;">
+        <div class="empty-icon">🌾</div>
+        <div class="empty-title">ยังไม่มีข้อมูลสหกรณ์</div>
+        <div class="empty-desc">กดปุ่ม "เพิ่มสหกรณ์" เพื่อเริ่มบันทึกและประเมินสหกรณ์ที่รับผิดชอบ</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ VIEW: FORM ═══ -->
+  <div class="view" id="view-form">
+
+    <!-- step track -->
+    <div class="step-track" id="step-track">
+      <div class="step-pill sp-active" id="sp1" onclick="goStep(1)">1 ข้อมูลสหกรณ์</div>
+      <div class="step-pill" id="sp2" onclick="goStep(2)">2 สภาพแวดล้อม</div>
+      <div class="step-pill" id="sp3" onclick="goStep(3)">3 ความเสี่ยง</div>
+      <div class="step-pill" id="sp4" onclick="goStep(4)">4 สารสนเทศ+ติดตาม</div>
+    </div>
+
+    <!-- STEP 1: info -->
+    <div id="step-1">
+      <div class="form-card">
+        <div class="form-card-head">
+          <span style="font-size:20px;">📋</span>
+          <h3>ข้อมูลสหกรณ์ที่รับการประเมิน</h3>
+        </div>
+        <div class="form-card-body">
+          <div class="info-grid">
+            <div class="full">
+              <label class="field-label">ชื่อสหกรณ์ / กลุ่มเกษตรกร *</label>
+              <input class="field-input" id="f-name" placeholder="เช่น สหกรณ์การเกษตรบางรัก จำกัด" />
+            </div>
+            <div class="full">
+              <label class="field-label">สำนักงานสหกรณ์จังหวัด / สำนักงานส่งเสริมสหกรณ์กรุงเทพมหานคร *</label>
+              <input class="field-input" id="f-office" placeholder="เช่น สำนักงานสหกรณ์จังหวัดเชียงใหม่ หรือ สำนักงานส่งเสริมสหกรณ์กรุงเทพมหานคร พื้นที่ 1" />
+            </div>
+            <div>
+              <label class="field-label">ชื่อผู้ประเมิน (นักวิชาการสหกรณ์)</label>
+              <input class="field-input" id="f-auditor" placeholder="ชื่อ-สกุล ตำแหน่ง" />
+            </div>
+            <div>
+              <label class="field-label">อำเภอ / เขต ที่ตั้งสหกรณ์</label>
+              <input class="field-input" id="f-district" placeholder="เช่น อำเภอเมือง หรือ เขตบางรัก" />
+            </div>
+            <div>
+              <label class="field-label">ปีบัญชีสิ้นสุดวันที่</label>
+              <input class="field-input" type="date" id="f-date" />
+            </div>
+            <div>
+              <label class="field-label">วันที่ประเมิน</label>
+              <input class="field-input" type="date" id="f-evaldate" />
+            </div>
+            <div class="full">
+              <label class="field-label">ประเภทสหกรณ์</label>
+              <div class="type-grid">
+                <div class="type-btn" onclick="selType(this,'สหกรณ์การเกษตร')"><span class="ti">🌾</span>สหกรณ์การเกษตร</div>
+                <div class="type-btn" onclick="selType(this,'สหกรณ์ประมง')"><span class="ti">🐟</span>สหกรณ์ประมง</div>
+                <div class="type-btn" onclick="selType(this,'สหกรณ์นิคม')"><span class="ti">🏘️</span>สหกรณ์นิคม</div>
+                <div class="type-btn" onclick="selType(this,'กลุ่มเกษตรกร')"><span class="ti">👨‍🌾</span>กลุ่มเกษตรกร</div>
+                <div class="type-btn" onclick="selType(this,'สหกรณ์ร้านค้า')"><span class="ti">🏪</span>สหกรณ์ร้านค้า</div>
+                <div class="type-btn" onclick="selType(this,'สหกรณ์บริการ')"><span class="ti">🔧</span>สหกรณ์บริการ</div>
+                <div class="type-btn" onclick="selType(this,'สหกรณ์ออมทรัพย์')"><span class="ti">💰</span>สหกรณ์ออมทรัพย์</div>
+                <div class="type-btn" onclick="selType(this,'เครดิตยูเนี่ยน')"><span class="ti">🤝</span>เครดิตยูเนี่ยน</div>
+              </div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-gold" onclick="goStep(2)">ถัดไป → ส่วนที่ 1 ⟶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 2: part 1 -->
+    <div id="step-2" style="display:none;">
+      <div class="form-card">
+        <div class="form-card-head">
+          <span style="font-size:20px;">🏢</span>
+          <h3>ส่วนที่ 1 · สภาพแวดล้อมการควบคุม (Control Environment)</h3>
+          <span class="score-badge" id="badge-p1">—</span>
+        </div>
+        <div class="form-card-body">
+          <div class="notice">💡 ตอบ "ใช่" = 1 · "ไม่ใช่" = 0 · "ไม่มีกิจกรรม" = ไม่นับฐาน</div>
+          <div id="p1-body"></div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" onclick="goStep(1)">← กลับ</button>
+            <button class="btn btn-gold" onclick="goStep(3)">ถัดไป → ส่วนที่ 2 ⟶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 3: part 2 -->
+    <div id="step-3" style="display:none;">
+      <div class="form-card">
+        <div class="form-card-head">
+          <span style="font-size:20px;">⚠️</span>
+          <h3>ส่วนที่ 2 · ความเสี่ยงและกิจกรรมควบคุม (Risk Assessment)</h3>
+          <span class="score-badge" id="badge-p2">—</span>
+        </div>
+        <div class="form-card-body">
+          <div class="score-legend">
+            <div class="leg"><div class="leg-dot" style="background:#f0fdf4;border:1px solid #86efac"></div><b>3</b> = ดี</div>
+            <div class="leg"><div class="leg-dot" style="background:#fefce8;border:1px solid #fde047"></div><b>2</b> = ดีพอสมควร มีข้อบกพร่อง</div>
+            <div class="leg"><div class="leg-dot" style="background:#fff7ed;border:1px solid #fdba74"></div><b>1</b> = ต้องปรับปรุง</div>
+            <div class="leg"><div class="leg-dot" style="background:#fef2f2;border:1px solid #fca5a5"></div><b>0</b> = ไม่มีระดับควบคุม</div>
+            <div class="leg"><div class="leg-dot" style="background:var(--mist2);border:1px solid var(--line)"></div><b>N/A</b> = ไม่มีธุรกิจนี้</div>
+          </div>
+          <div class="sub-tabs" id="p2-tabs"></div>
+          <div id="p2-body"></div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" onclick="goStep(2)">← กลับ</button>
+            <button class="btn btn-gold" onclick="goStep(4)">ถัดไป → ส่วนที่ 3-4 ⟶</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STEP 4: part 3+4 -->
+    <div id="step-4" style="display:none;">
+      <div class="form-card">
+        <div class="form-card-head">
+          <span style="font-size:20px;">📡</span>
+          <h3>ส่วนที่ 3-4 · สารสนเทศ + การติดตามประเมินผล</h3>
+          <span class="score-badge" id="badge-p34">—</span>
+        </div>
+        <div class="form-card-body">
+          <div class="notice">💡 ตอบ "ใช่" = 1 · "ไม่ใช่" = 0 · "ไม่มีกิจกรรม" = ไม่นับฐาน</div>
+          <div id="p34-body"></div>
+          <div class="btn-row">
+            <button class="btn btn-ghost" onclick="goStep(3)">← กลับ</button>
+            <button class="btn btn-jade" onclick="saveCoop()">💾 บันทึกและดูผล</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /view-form -->
+
+  <!-- ═══ VIEW: RESULT ═══ -->
+  <div class="view" id="view-result">
+    <div id="result-empty" class="empty-state">
+      <div class="empty-icon">📊</div>
+      <div class="empty-title">ยังไม่มีผลการประเมิน</div>
+      <div class="empty-desc">กรอกแบบประเมินสหกรณ์และกด "บันทึกและดูผล" ก่อน</div>
+    </div>
+    <div id="result-content" style="display:none;">
+      <div class="result-hero" id="result-hero"></div>
+      <div class="result-parts" id="result-parts"></div>
+    </div>
+  </div>
+
+  <!-- ═══ VIEW: REPORT ═══ -->
+  <div class="view" id="view-report">
+    <div id="report-empty" class="empty-state">
+      <div class="empty-icon">🖨️</div>
+      <div class="empty-title">ยังไม่มีรายงาน</div>
+      <div class="empty-desc">บันทึกผลการประเมินสหกรณ์ก่อน แล้วมาดูรายงานที่นี่</div>
+    </div>
+    <div id="report-content" style="display:none;"></div>
+  </div>
+
+</main>
+</div><!-- /shell -->
+
+<script>
+// ═══════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════
+const P1 = [
+  { g:'ความซื่อสัตย์และจริยธรรม', qs:[
+    'มีการกำหนดเกี่ยวกับความซื่อสัตย์และจริยธรรมในการประพฤติปฏิบัติของคณะกรรมการและฝ่ายจัดการ',
+    'มีการสื่อสารทำความเข้าใจกับทุกฝ่ายให้ทราบถึงบทลงโทษเกี่ยวกับความซื่อสัตย์และจริยธรรม',
+    'มีการดำเนินการเมื่อมีการปฏิบัติที่ไม่เป็นไปตามที่กำหนด'
+  ]},
+  { g:'คณะกรรมการดำเนินการ', qs:[
+    'มีความรู้ความสามารถและประสบการณ์เพียงพอในการบริหารงาน',
+    'การตัดสินใจเกี่ยวกับการบริหารงานเป็นไปอย่างเหมาะสม มิได้ขึ้นอยู่กับบุคคลใดบุคคลหนึ่งหรือเฉพาะกลุ่ม',
+    'กรรมการเข้าร่วมประชุมคณะกรรมการดำเนินการโดยสม่ำเสมอ'
+  ]},
+  { g:'ฝ่ายจัดการ / ผู้ทำหน้าที่แทนฝ่ายจัดการ', qs:[
+    'ฝ่ายจัดการมีความรู้ความสามารถเหมาะสมกับตำแหน่ง',
+    'มีหลักประกันการทำงานที่เหมาะสมกับตำแหน่งหน้าที่ในปัจจุบัน',
+    'มีการมอบหมายหน้าที่ความรับผิดชอบขัดเจนและปฏิบัติหน้าที่ตามที่ได้รับมอบหมาย',
+    'มีการสับเปลี่ยนหมุนเวียนเจ้าหน้าที่ในตำแหน่งงานต่างๆ ตามความเหมาะสม',
+    'มีเจ้าหน้าที่เพียงพอต่อการปฏิบัติงาน'
+  ]},
+  { g:'ผู้ตรวจสอบกิจการ / ผู้ตรวจสอบภายใน', qs:[
+    'มีความรู้และประสบการณ์โดยตรงในการปฏิบัติหน้าที่',
+    'ได้ปฏิบัติงานตรวจสอบอย่างเหมาะสมตามหน้าที่ที่กำหนดไว้',
+    'มีอิสระในการปฏิบัติงานทั้งจากคณะกรรมการและฝ่ายจัดการ'
+  ]},
+  { g:'นโยบายและการวางแผน', qs:[
+    'แผนงานที่กำหนดมีความเป็นไปได้ในทางปฏิบัติ',
+    'มีการกำหนดบุคลากรและงบประมาณสอดคล้องกับแผนงาน'
+  ]},
+  { g:'โครงสร้างสหกรณ์', qs:[
+    'มีการแบ่งส่วนงานที่ชัดเจน เหมาะสมกับขนาดและลักษณะการดำเนินธุรกิจ',
+    'มีการแบ่งแยกหน้าที่และความรับผิดชอบของเจ้าหน้าที่ในระดับต่างๆ อย่างเหมาะสมตามส่วนงานที่กำหนดอย่างชัดเจน',
+    'มีการกำหนดระเบียบและแนวปฏิบัติในการดำเนินงานด้านต่างๆ ครอบคลุมทุกธุรกิจ'
+  ]},
+  { g:'การบริหารทรัพยากรบุคคล', qs:[
+    'มีการกำหนดระเบียบและแนวปฏิบัติด้านการบริหารทรัพยากรบุคคลไว้ชัดเจน (สรรหา คัดเลือก บรรจุแต่งตั้ง หลักประกัน ผลตอบแทน เลื่อนตำแหน่ง พัฒนา มาตรการโทษ)',
+    'มีการปฏิบัติตามหลักเกณฑ์ที่กำหนด',
+    'มีแผนการพัฒนาบุคลากรประจำปี'
+  ]},
+  { g:'สภาพเศรษฐกิจและสภาพแวดล้อมทั่วไป', qs:[
+    'การเปลี่ยนแปลงอัตราดอกเบี้ย/อัตราแลกเปลี่ยน/อัตราภาษี ไม่ส่งผลกระทบสาระสำคัญต่อสหกรณ์',
+    'การเปลี่ยนแปลงกฎหมาย/นโยบายรัฐบาล/ระเบียบ ไม่ส่งผลกระทบสาระสำคัญต่อสหกรณ์',
+    'ภาวะการแข่งขันในตลาดไม่ส่งผลกระทบสาระสำคัญต่อสหกรณ์'
+  ]}
+];
+
+const P2S = [
+  { id:'finance', label:'การเงินการบัญชี', groups:[
+    { n:'การปฏิบัติงานด้านการเงินไม่เหมาะสม', qs:['มีการแบ่งแยกหน้าที่ระหว่างผู้ทำหน้าที่การเงิน บัญชี และอนุมัติออกจากกัน','มีการจัดทำบัญชีพิสูจน์ยอดเงินฝากธนาคาร']},
+    { n:'รับเงินแล้วไม่บันทึกบัญชี', qs:['มีระบบเก็บรักษาใบเสร็จรับเงินที่เหมาะสม','มีการออกใบเสร็จรับเงินทุกครั้งที่มีการรับเงิน','ใช้ใบเสร็จรับเงินเรียงตามลำดับเลขที่และลงลายมือชื่อ','ใบเสร็จที่ยกเลิกนำมาแนบติดไว้กับสำเนา','มีทะเบียนคุมใบเสร็จรับเงิน','การรับเงินด้วยเช็คมีทะเบียนคุมเช็ค']},
+    { n:'จ่ายเงินโดยไม่มีหลักฐาน/ซ้ำ/เกิน', qs:['ตรวจสอบเอกสารหลักฐานครบก่อนจ่าย ประทับตรา "จ่ายแล้ว"','มีการอนุมัติจ่ายเงินโดยผู้มีอำนาจ','จ่ายเช็คระบุชื่อผู้รับและขีด "ผู้ถือ" ออก','เช็คยกเลิกประทับตรายกเลิก ติดต้นขั้ว','มีทะเบียนคุมเช็คจ่าย','ไม่ลงลายมือชื่อล่วงหน้าในสั่งจ่ายเช็ค']},
+    { n:'เก็บรักษาเงินไม่ปลอดภัย', qs:['กำหนดผู้รับผิดชอบเก็บรักษาเงินสด','เก็บเงินสดตามวงเงินที่กำหนด','เก็บเงิน/เช็คในตู้นิรภัยหรือที่ปลอดภัย','ตรวจนับเงินสดในมือกับบัญชีทุกวัน']},
+    { n:'จัดทำบัญชีไม่ถูกต้อง', qs:['มีผู้สอบทานความถูกต้องในการบันทึกบัญชี','จัดทำบัญชีเรียบร้อยเป็นปัจจุบันตามระเบียบนายทะเบียน','เปรียบเทียบยอดรวมบัญชีย่อยกับบัญชีคุมประจำ','เปรียบเทียบยอดตามธนาคารกับบัญชีเงินฝากธนาคาร','จัดทำงบทดลองอย่างน้อยเดือนละครั้ง']},
+    { n:'กรณีใช้โปรแกรมระบบบัญชี', qs:['โปรแกรมเหมาะสมกับลักษณะธุรกิจ','มีคู่มือการใช้โปรแกรม','ออกใบเสร็จจากโปรแกรมมีการเรียงเลขที่','เริ่มต้นเลขที่ใบเสร็จใหม่ทุกปีบัญชี','มีรายงานการยกเลิกใบเสร็จ','โปรแกรมไม่สามารถแก้ไขข้อมูลย้อนหลัง','ระบบงานไม่เปิดโอกาสแก้ไขโดยไร้ร่องรอย','เจ้าหน้าที่มีทักษะด้านคอมพิวเตอร์','กำหนดรหัสผ่านสำหรับเจ้าหน้าที่ทุกระดับ','กำหนดผู้ดูแลระบบงานและมีรหัสผ่านเฉพาะ','เปลี่ยนรหัสผ่านตามระยะเวลาที่กำหนด','ตรวจสอบและอนุมัติรายการก่อนบันทึกข้อมูล']}
+  ]},
+  { id:'credit', label:'ธุรกิจสินเชื่อ', groups:[
+    { n:'การดำเนินงานไม่เป็นไปตามแผน/เป้าหมาย', qs:['มีการกำหนดแผน/เป้าหมายการดำเนินธุรกิจ']},
+    { n:'เจ้าหน้าที่สินเชื่อทำหน้าที่รับ-จ่ายและทำบัญชี', qs:['แบ่งแยกหน้าที่เจ้าหน้าที่สินเชื่อ การเงิน และบัญชี','ทุกสิ้นวันตรวจสอบเอกสารการจ่ายกู้/รับชำระหนี้/บัญชีย่อย']},
+    { n:'จ่ายเงินกู้โดยไม่ได้รับอนุมัติ', qs:['พิจารณาและอนุมัติเงินกู้โดยผู้มีอำนาจก่อนจ่าย','บันทึกรายงานการประชุมเกี่ยวกับการอนุมัติเงินกู้']},
+    { n:'จ่ายเงินกู้เกินวงเงินที่อนุมัติ', qs:['ตรวจสอบใบรับเงินกู้กับสัญญาและมติก่อนจ่าย','บันทึกวงเงินที่อนุมัติในคำขอกู้']},
+    { n:'จ่ายเงินกู้โดยไม่มีหลักประกัน', qs:['จัดทำหนังสือค้ำประกัน/หลักประกันตามระเบียบ','หลักประกันอสังหาริมทรัพย์จดทะเบียนจำนอง','มีทะเบียนผู้ค้ำประกัน/หลักประกัน','ประเมินราคาอสังหาริมทรัพย์หลักประกัน']},
+    { n:'รับชำระหนี้นอกที่ทำการ', qs:['กำหนดแนวทางรับชำระหนี้นอกที่ทำการ','มีมติคณะกรรมการให้รับชำระนอกที่ทำการ']},
+    { n:'รับชำระหนี้ไม่บันทึกบัญชี', qs:['ออกใบเสร็จและบันทึกบัญชีย่อยทุกครั้งที่ชำระหนี้','เปรียบเทียบบัญชีย่อยกับบัญชีคุมทุกเดือน','ยืนยันยอดลูกหนี้เงินกู้อย่างน้อยปีละครั้ง']},
+    { n:'ลูกหนี้ไม่สามารถชำระหนี้ตามกำหนด', qs:['ติดตามการใช้เงินกู้ตามวัตถุประสงค์','ทวงถาม/เร่งรัดลูกหนี้ที่ผิดนัด','จัดทำรายงานหนี้ถึงกำหนดชำระ']},
+    { n:'ตั้งค่าเผื่อหนี้สงสัยจะสูญไม่พอ', qs:['วิเคราะห์สภาพลูกหนี้และหลักประกันเป็นครั้งคราว','ตั้งค่าเผื่อหนี้สงสัยจะสูญตามระเบียบ']},
+    { n:'คำนวณดอกเบี้ยผิดพลาด', qs:['ประกาศอัตราดอกเบี้ยในที่เปิดเผย','ทดสอบการคำนวณดอกเบี้ย/ใช้โปรแกรมคำนวณ']}
+  ]},
+  { id:'trading', label:'ธุรกิจจัดหาสินค้า', groups:[
+    { n:'ไม่มีแผน/เป้าหมาย', qs:['มีการกำหนดแผน/เป้าหมายการดำเนินธุรกิจ']},
+    { n:'ซื้อสินค้าเกิน/ไม่ตรงความต้องการ', qs:['สำรวจความต้องการสมาชิก/ตลาดก่อนจัดซื้อ','ตรวจสอบรายการและปริมาณสินค้าก่อนจัดซื้อ']},
+    { n:'ซื้อสินค้าไม่ผ่านอนุมัติ', qs:['กำหนดหลักเกณฑ์และวิธีการจัดซื้อสินค้า','กำหนดผู้มีหน้าที่สั่งซื้อและอนุมัติสั่งซื้อ']},
+    { n:'ซื้อสินค้าราคาสูงกว่าตลาด', qs:['ไม่ซื้อจากผู้ขายเพียงรายเดียวเป็นเวลานาน','เปรียบเทียบราคาจากผู้ขายหลายรายก่อนตัดสินใจ']},
+    { n:'ซื้อสินค้าไม่รับตามใบกำกับ', qs:['มอบให้ผู้รับสินค้าแยกจากผู้จัดซื้อ/บัญชี','ตรวจสอบจำนวน/คุณภาพตรงกับใบสั่งซื้อ']},
+    { n:'บันทึกสินค้าไม่ครบถ้วน', qs:['กรณีจำเป็นขายสินค้าก่อนบันทึก ต้องได้รับอนุมัติ']},
+    { n:'จ่ายชำระหนี้เจ้าหนี้การค้าเกินกว่าที่มีอยู่', qs:['อนุมัติการจ่ายชำระหนี้','ตรวจสอบเอกสารหนี้ก่อนชำระ','จัดทำบัญชีย่อยเจ้าหนี้เป็นปัจจุบัน','จ่ายชำระตามเวลาและเงื่อนไข','ยืนยันยอดเจ้าหนี้การค้า']},
+    { n:'เก็บรักษาสินค้าไม่เหมาะสม', qs:['สถานที่จัดเก็บปลอดภัย','มีทะเบียนคุมสินค้า/บัตรสินค้าเป็นปัจจุบัน','ประกันภัยสินค้าและสถานที่จัดเก็บ','แยกสินค้าเสื่อมสภาพออกจากสินค้าปกติ','แยกสินค้าเป็นหมวดสะดวกตรวจนับ']},
+    { n:'ไม่มีการควบคุมสินค้าคงเหลือ', qs:['ตรวจนับสินค้าก่อนนำเข้าสถานที่จัดเก็บ','กำหนดผู้มีอำนาจเบิกสินค้า','แต่งตั้งคณะกรรมการตรวจนับสินค้าที่เป็นกลาง','ตรวจนับสินค้าเปรียบเทียบทะเบียนคุมเป็นครั้งคราว','ตัดสินค้าขาด/เสื่อมตามระเบียบนายทะเบียน']},
+    { n:'บันทึกยอดขายไม่ครบ', qs:['กำหนดราคาขายและส่วนลดชัดเจน','แบ่งแยกหน้าที่ฝ่ายขาย จัดซื้อ เก็บรักษา บัญชี การเงิน','กำหนดระเบียบขายเชื่อ','อนุมัติวงเงินขายเชื่อโดยผู้มีอำนาจ']},
+    { n:'ลูกหนี้ปฏิเสธการเป็นหนี้', qs:['ออกเอกสารหลักฐานการขายทุกครั้ง','ลงลายมือชื่อรับสินค้า','ยืนยันยอดลูกหนี้การค้า']},
+    { n:'ลูกหนี้ไม่ชำระหนี้ตามกำหนด', qs:['ประเมินความสามารถชำระหนี้ก่อนอนุมัติขายเชื่อ','ติดตามเร่งรัดการชำระหนี้','หลักประกันเพียงพอกับจำนวนหนี้','รายงานหนี้เกินกำหนดเสนอคณะกรรมการ']}
+  ]},
+  { id:'agri', label:'รวบรวมผลผลิต', groups:[
+    { n:'ไม่มีแผน/เป้าหมาย', qs:['มีการกำหนดแผน/เป้าหมายการดำเนินธุรกิจ']},
+    { n:'บุคคลเดียวมีอำนาจในการรวบรวมและจำหน่าย', qs:['กำหนดหน้าที่ผู้รวบรวมและผู้จำหน่าย','กำหนดวงเงินทดรองผลิตผล','ผู้รวบรวมส่งหลักฐานพร้อมเงินคงเหลือทุกสิ้นวัน','รวบรวมแต่ละครั้งสืบราคาจากพาณิชย์/พ่อค้าคนกลาง','รวบรวมทุกครั้งผ่านอนุมัติจากผู้มีอำนาจ']},
+    { n:'รับซื้อผลิตผลนอกที่ทำการ', qs:['กำหนดแนวทางซื้อผลิตผลนอกที่ทำการ','มีมติคณะกรรมการให้รวบรวมนอกที่ทำการ']},
+    { n:'ผลิตผล/วัตถุดิบที่ซื้อไม่มีคุณภาพ', qs:['ผู้ซื้อมีความรู้เกี่ยวกับผลิตผล/วัตถุดิบ','ตรวจสอบคุณภาพ/ความชื้น/สิ่งเจือปนก่อนซื้อ','ราคาซื้อสอดคล้องกับคุณภาพ']},
+    { n:'ผลิตผลขายได้น้อย', qs:['วางแผนหาตลาดรองรับ','สำรวจความต้องการตลาดก่อนรวบรวม']},
+    { n:'เก็บรักษาผลิตผลไม่เหมาะสม', qs:['สถานที่จัดเก็บเหมาะสม ปลอดภัย','จัดเก็บแยกตามชนิดและคุณภาพ','ประกันภัยสถานที่จัดเก็บ','มียามรักษาความปลอดภัย']},
+    { n:'ผลิตผลเสื่อมคุณภาพ/ขาดหาย', qs:['ทดสอบการอบรุต/ขาดน้ำหนักของผลิตผลแต่ละชนิด','ตรวจสอบคุณภาพผลิตผลเป็นระยะๆ','ตัดสินค้าขาด/เสื่อมตามระเบียบนายทะเบียน']}
+  ]},
+  { id:'service', label:'บริการการเกษตร', groups:[
+    { n:'ไม่มีแผน/เป้าหมาย', qs:['มีการกำหนดแผน/เป้าหมายการดำเนินธุรกิจ']},
+    { n:'บันทึกรายได้ไม่ครบถ้วน', qs:['กำหนดอัตราค่าบริการชัดเจน','คำนวณปริมาณบริการกับอัตราค่าบริการเปรียบเทียบรายได้','จัดทำหลักฐานการให้บริการทุกครั้ง']},
+    { n:'ต้นทุนบริการสูงกว่าที่ควร', qs:['มีทะเบียนคุมค่าใช้จ่ายในการให้บริการ','เปรียบเทียบรายได้กับค่าใช้จ่าย','บำรุงรักษาเครื่องจักรตามความเหมาะสม','นัดหมายสมาชิก/ลูกค้าล่วงหน้าก่อนบริการ']},
+    { n:'ลูกหนี้ไม่ชำระค่าบริการ', qs:['รายงานหนี้เกินกำหนดเสนอคณะกรรมการ','ยืนยันยอดลูกหนี้ค่าบริการ','ตั้งค่าเผื่อหนี้สงสัยจะสูญตามระเบียบ']}
+  ]},
+  { id:'deposit', label:'เงินรับฝาก', groups:[
+    { n:'ไม่มีแผน/เป้าหมาย', qs:['มีการกำหนดแผน/เป้าหมายการดำเนินธุรกิจ']},
+    { n:'เจ้าหน้าที่รับฝากทำหน้าที่รับ-จ่ายและบัญชีย่อย', qs:['ทุกสิ้นวันตรวจสอบเอกสารฝาก-ถอนและบัญชีย่อยเจ้าหนี้เงินรับฝาก']},
+    { n:'ปฏิบัติผิดระเบียบ', qs:['ก่อนรับฝากจากสหกรณ์อื่นตรวจสอบวงเงินกู้ยืมจาก คพช.','ไม่มีการรับฝากเงินจากบุคคลภายนอก']},
+    { n:'รับฝากเงินนอกที่ทำการ', qs:['กำหนดแนวทางรับฝากนอกที่ทำการ','มีมติคณะกรรมการให้รับฝากนอกที่ทำการ']},
+    { n:'รับ-ถอนเงินไม่ตรงหลักฐาน', qs:['สมาชิกกรอกใบนำฝาก/ถอนด้วยตนเองหรือลงนาม','ตรวจสอบลายมือชื่อในใบถอนกับบัตรตัวอย่างทุกครั้ง','ไม่เก็บสมุดคู่ฝากของสมาชิกไว้ที่สหกรณ์','ตรวจสอบใบนำฝาก/ถอนกับสมุดคู่ฝากและบัญชีย่อย','ยืนยันยอดเงินรับฝากอย่างน้อยปีละครั้ง']},
+    { n:'บัญชีย่อยเจ้าหนี้เงินรับฝากไม่ถูกต้อง', qs:['บันทึกรายการฝาก-ถอนในบัญชีย่อยรายบุคคลทุกครั้ง','เปรียบเทียบจำนวนฝาก-ถอนระหว่างบัญชีคุมกับย่อยประจำ']},
+    { n:'คำนวณดอกเบี้ยเงินรับฝากผิด', qs:['ประกาศอัตราดอกเบี้ยในที่เปิดเผย','ทดสอบการคำนวณดอกเบี้ยเงินฝาก/ใช้โปรแกรมคำนวณ']}
+  ]},
+  { id:'invest', label:'เงินลงทุน', groups:[
+    { n:'ลงทุนหลักทรัพย์ผิดกฎหมาย', qs:['กรณีลงทุนนอกเหนือประกาศ คพช. ผ่านอนุมัติที่ประชุมใหญ่และได้รับความเห็นชอบ']},
+    { n:'ลงทุนในหลักทรัพย์ไม่เหมาะสม', qs:['ศึกษาสภาวะเศรษฐกิจและวิเคราะห์ผลตอบแทนก่อนลงทุน','มีแผนการลงทุนที่ผ่านอนุมัติคณะกรรมการ/ที่ประชุมใหญ่']},
+    { n:'ได้รับผลตอบแทนไม่ครบ', qs:['มีทะเบียนคุมหลักทรัพย์','ตรวจสอบผลตอบแทนเปรียบเทียบกับข้อตกลง/เงื่อนไข']},
+    { n:'จำหน่ายเงินลงทุนขาดทุน/ไม่คุ้มค่า', qs:['ติดตามความเคลื่อนไหวของเงินลงทุนสม่ำเสมอ','จัดทำข้อมูลจำหน่ายเงินลงทุนเสนอคณะกรรมการอนุมัติ']},
+    { n:'เอกสารเงินลงทุนสูญหาย/ไม่ครบ', qs:['ตรวจสอบเอกสารเงินลงทุนกับทะเบียนคุมเป็นครั้งคราว','กำหนดผู้รับผิดชอบเก็บรักษาหลักทรัพย์ในที่ปลอดภัย']},
+    { n:'การแสดงรายการเงินลงทุน ณ สิ้นปีไม่ถูกต้อง', qs:['เปรียบเทียบราคาทุนกับมูลค่ายุติธรรม กรณีเงินลงทุนในความต้องการตลาด']}
+  ]},
+  { id:'asset', label:'ที่ดิน อาคาร อุปกรณ์', groups:[
+    { n:'จัดซื้อ/ก่อสร้างไม่เป็นไปตามระเบียบ', qs:['กำหนดหลักเกณฑ์และวิธีการจัดซื้อจัดจ้าง','กำหนดงบประมาณและแผนจัดซื้อ/ก่อสร้างในแผนงานประจำปี']},
+    { n:'ทรัพย์สินเสื่อมชำรุด/สูญหาย', qs:['รายงานคณะกรรมการตรวจนับทรัพย์สินทุกสิ้นปี แจ้งรายการชำรุด/เสื่อม','กำหนดมาตรการป้องกันและดูแลรักษาทรัพย์สิน']},
+    { n:'ดูแลบำรุงรักษาไม่เหมาะสม', qs:['มอบหมายผู้รับผิดชอบดูแลบำรุงรักษา','ประกันภัยทรัพย์สินอย่างเหมาะสม','มีทะเบียนทรัพย์สิน ติดหมายเลขครุภัณฑ์']},
+    { n:'โอนทรัพย์สินออกจากทะเบียนไม่มีเหตุผล', qs:['รายงานทรัพย์สินที่ไม่ได้ใช้งาน ระบุสาเหตุ','จำหน่ายทรัพย์สินได้รับอนุมัติและตามระเบียบ','ตัดจำหน่ายออกจากทะเบียนเมื่อขายหรือเลิกใช้']},
+    { n:'ซื้อทรัพย์สินราคาสูงกว่าที่ควร', qs:['แต่งตั้งคณะกรรมการจัดซื้อ/จัดจ้าง','สอบถามเพื่อเปรียบเทียบราคาก่อนซื้อ/จัดจ้าง']},
+    { n:'บันทึกมูลค่าทรัพย์สินไม่ถูกต้อง', qs:['บันทึกมูลค่าตามราคาซื้อ รวมภาษี ต้นทุนกู้ยืม และต้นทุนทางตรงอื่น']}
+  ]},
+  { id:'debt', label:'เจ้าหนี้เงินกู้', groups:[
+    { n:'กู้เงินไม่ผ่านอนุมัติ', qs:['การกู้อยู่ในวงเงินที่ได้รับอนุมัติ/เห็นชอบจากนายทะเบียน','กำหนดผู้มีอำนาจลงนามแทนสหกรณ์ในการกู้ยืม']},
+    { n:'นำเงินกู้ไปใช้ผิดวัตถุประสงค์', qs:['เงินกู้ยืมได้นำไปใช้ตามวัตถุประสงค์ที่ขอกู้']},
+    { n:'จ่ายชำระหนี้เกินกว่าหนี้ที่มีอยู่', qs:['อนุมัติการจ่ายชำระหนี้','ตรวจสอบเอกสารหนี้และคำนวณดอกเบี้ยจ่ายก่อนชำระ','ชำระหนี้เป็นไปตามกำหนดสัญญา','ยืนยันยอดเจ้าหนี้เงินกู้']}
+  ]},
+  { id:'member', label:'สมาชิกและทุน', groups:[
+    { n:'ไม่มีแผน/เป้าหมาย', qs:['มีการกำหนดแผนและเป้าหมายเกี่ยวกับสมาชิกและทุนเรือนหุ้น']},
+    { n:'รับสมาชิกผิดหลักเกณฑ์', qs:['ผู้สมัครได้รับรองจากที่ประชุมกลุ่ม','มีมติคณะกรรมการให้รับเข้าเป็นสมาชิก','ชำระค่าหุ้นและค่าธรรมเนียมแรกเข้า']},
+    { n:'บันทึกทุนเรือนหุ้นไม่ครบ', qs:['ส่งชำระค่าหุ้น/เพิ่มหุ้นตามระเบียบ','มีทะเบียนสมาชิกและสมุดคู่มือสมาชิก','จ่ายคืนค่าหุ้นหลังได้รับอนุมัติให้ลาออก','เปรียบเทียบยอดทะเบียนหุ้นกับบัญชีคุม','ยืนยันทุนเรือนหุ้นอย่างน้อยปีละครั้ง']},
+    { n:'สมาชิกลาออกมีภาระผูกพัน', qs:['ตรวจสอบภาระผูกพันก่อนอนุมัติลาออก','มีมติคณะกรรมการอนุมัติลาออก/ให้ออก']},
+    { n:'จ่ายเงินปันผลไม่ถูกต้อง', qs:['คำนวณยอดปันผลตามระยะเวลาถือหุ้น','จัดทำรายละเอียดเงินปันผลค้างจ่าย','มีหลักฐานการจ่ายเงินปันผลครบถ้วน']}
+  ]}
+];
+
+const P3 = [
+  { g:'ข้อมูลข่าวสาร', qs:['สำรวจความต้องการและความคิดเห็นจากสมาชิกและภายนอก','รวบรวมข้อมูลและจัดทำรายงานผลดำเนินงานประจำเดือนเพื่อบริหาร','รวบรวมข้อมูลจัดทำรายงานกิจการ/กฎหมาย/ระเบียบเสนอที่ประชุมใหญ่','แจ้งข้อมูลข่าวสารดำเนินธุรกิจและประชาสัมพันธ์แก่สมาชิก','มีการสื่อสารข้อมูลภายในองค์กร','บริการข้อมูลแก่สมาชิกอย่างรวดเร็ว']},
+  { g:'ระบบสารสนเทศ', qs:['คณะกรรมการใช้ข้อมูลทางการเงินบัญชีในการบริหารงานทันต่อเหตุการณ์','มีคู่มือ/คำแนะนำการปฏิบัติงานหรือฝึกอบรมการใช้โปรแกรม','สามารถแก้ไขปัญหาเบื้องต้นด้านคอมพิวเตอร์ได้','บำรุงรักษาอุปกรณ์คอมพิวเตอร์ตามความเหมาะสม','ประสิทธิภาพคอมพิวเตอร์/ระบบงานเหมาะสมกับการใช้งาน']},
+  { g:'การป้องกันดูแลรักษาสารสนเทศ', qs:['ระบบความปลอดภัยข้อมูลสารสนเทศกำหนดสิทธิ์ตามระดับความสำคัญ','มีการป้องกันไวรัสคอมพิวเตอร์','อัปเดตการป้องกันไวรัสสม่ำเสมอ','สำรองข้อมูลตามระยะเวลา เก็บสำรองในที่ปลอดภัย','ระบบป้องกัน/เตือนภัยและเครื่องสำรองไฟฟ้า','จัดวางคอมพิวเตอร์ในสภาพแวดล้อมเหมาะสม']}
+];
+
+const P4 = [
+  { g:'การติดตามและประเมินผล', qs:['มีรายงานผลปฏิบัติงานผู้ตรวจสอบกิจการเป็นลายลักษณ์อักษรสม่ำเสมอ','จัดให้มีประชุมคณะกรรมการดำเนินการสม่ำเสมอ','มีบันทึกรายงานการประชุมเป็นลายลักษณ์อักษร','รายงานปัญหาดำเนินงานแต่ละด้าน ติดตามความคืบหน้าแก้ไขทันเหตุการณ์','เปรียบเทียบผลดำเนินงานกับแผนงานและงบประมาณ','พิจารณาปรับแก้ไขผลดำเนินงานหากไม่เป็นไปตามแผน','นำข้อสังเกต/บกพร่องจากผู้สอบบัญชี/ผู้ตรวจสอบมาพิจารณาดำเนินการ','ติดตามผลปฏิบัติงานบุคลากรตามที่กำหนด']}
+];
+
+// ═══════════════════════════════════════════════════════
+// STATE & STORAGE
+// ═══════════════════════════════════════════════════════
+const STORE_KEY = 'cpd_coop_db';
+let db = { coops: [] };   // {id, info:{}, answers:{p1,p2,p3,p4}, scores:{}, savedAt}
+let cur = null;           // current coop id being edited
+let curStep = 1;
+let p2ActiveSec = 'finance';
+
+async function loadDB() {
+  try {
+    const d = localStorage.getItem(STORE_KEY);
+    if(d) db = JSON.parse(d);
+  } catch(e){ /* key ไม่มีหรือ error → ใช้ db เริ่มต้น */ }
+}
+
+async function saveDB() {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(db));
+  } catch(e){ console.error('saveDB error', e); }
+}
+function getCoop(id) { return db.coops.find(c=>c.id===id); }
+function newId()     { return 'c_'+Date.now()+'_'+Math.random().toString(36).slice(2,7); }
+
+// ═══════════════════════════════════════════════════════
+// SCORING
+// ═══════════════════════════════════════════════════════
+function scoreYN(ans, prefix) {
+  let t=0, b=0;
+  Object.entries(ans).forEach(([k,v])=>{
+    if(!k.startsWith(prefix)) return;
+    if(v==='na') return;
+    b++; if(v==='yes') t++;
+  });
+  return b===0 ? 0 : t/b;
+}
+
+function scoreP2Sec(ans, secId) {
+  let t=0, b=0;
+  Object.entries(ans).forEach(([k,v])=>{
+    if(!k.startsWith('p2_'+secId+'_')) return;
+    if(v==='na'||v===undefined) return;
+    b++; t+=Number(v);
+  });
+  return b===0 ? null : { pct: t/(b*3), t, b };
+}
+
+function scoreP2Overall(ans) {
+  let arr=[];
+  P2S.forEach(s=>{ const r=scoreP2Sec(ans,s.id); if(r) arr.push(r.pct); });
+  return arr.length===0 ? 0 : arr.reduce((a,b)=>a+b,0)/arr.length;
+}
+
+function calcScores(ans) {
+  const p1 = scoreYN(ans,'p1_');
+  const p2 = scoreP2Overall(ans);
+  const p3 = scoreYN(ans,'p3_');
+  const p4 = scoreYN(ans,'p4_');
+  const ov = (p1+p2+p3+p4)/4;
+  return {p1,p2,p3,p4,overall:ov};
+}
+
+function lvl(s) {
+  if(s>0.95) return 'ดีมาก';
+  if(s>0.80) return 'ดี';
+  if(s>0.60) return 'พอใช้';
+  if(s>0.45) return 'ควรปรับปรุง';
+  return 'ต้องแก้ไข';
+}
+function lvlCls(s) {
+  if(s>0.95) return 'lv-excellent';
+  if(s>0.80) return 'lv-good';
+  if(s>0.60) return 'lv-ok';
+  if(s>0.45) return 'lv-improve';
+  return 'lv-fix';
+}
+function lvlColor(s) {
+  if(s>0.80) return '#15803d';
+  if(s>0.60) return '#1d4ed8';
+  if(s>0.45) return '#c2410c';
+  return '#b91c1c';
+}
+
+// ═══════════════════════════════════════════════════════
+// VIEWS
+// ═══════════════════════════════════════════════════════
+const VIEWS = {
+  dash:   { title:'แดชบอร์ดรวม',        sub:'ภาพรวมสหกรณ์ที่รับผิดชอบทั้งหมด' },
+  form:   { title:'กรอก/ประเมิน',       sub:'บันทึกข้อมูลและประเมินชั้นคุณภาพการควบคุมภายใน' },
+  result: { title:'ผลการประเมิน',       sub:'ชั้นคุณภาพและคะแนนรายส่วน' },
+  report: { title:'รายงานผลการประเมิน', sub:'รายงานผลการประเมินชั้นคุณภาพการควบคุมภายในสหกรณ์' }
+};
+let activeView = 'dash';
+
+function showView(v) {
+  activeView = v;
+  document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
+  document.getElementById('view-'+v).classList.add('active');
+  document.querySelectorAll('.nav-item[id]').forEach(el=>el.classList.remove('active'));
+  const ni = document.getElementById('nav-'+v);
+  if(ni) ni.classList.add('active');
+  document.getElementById('topbar-title').textContent = VIEWS[v].title;
+  document.getElementById('topbar-sub').textContent   = VIEWS[v].sub;
+}
+
+// ═══════════════════════════════════════════════════════
+// DASHBOARD
+// ═══════════════════════════════════════════════════════
+function refreshDash() {
+  const n = db.coops.length;
+  const scores = db.coops.map(c=>c.scores?.overall||0);
+  const avg = n>0 ? (scores.reduce((a,b)=>a+b,0)/n) : 0;
+  const good = scores.filter(s=>s>0.80).length;
+  const bad  = scores.filter(s=>s<=0.60).length;
+
+  document.getElementById('kpi-total').textContent = n;
+  document.getElementById('kpi-avg').textContent   = n>0 ? avg.toFixed(2) : '—';
+  document.getElementById('kpi-good').textContent  = good;
+  document.getElementById('kpi-bad').textContent   = bad;
+  document.getElementById('stat-total').textContent = n;
+  document.getElementById('stat-avg').textContent   = n>0 ? avg.toFixed(2) : '—';
+  document.getElementById('stat-excellent').textContent = scores.filter(s=>s>0.95).length;
+
+  const tbody = document.getElementById('dash-table-body');
+  const empty = document.getElementById('dash-empty');
+  if(n===0) { tbody.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display='none';
+
+  tbody.innerHTML = db.coops.map(c=>{
+    const s = c.scores||{};
+    const ov = s.overall||0;
+    const pill = (sc) => sc!=null
+      ? `<span class="pill-score ${lvlCls(sc)}">${sc.toFixed(2)}</span>`
+      : `<span style="color:var(--text-muted);font-size:11px;">—</span>`;
+    return `<tr>
+      <td><strong>${c.info.name||'(ไม่มีชื่อ)'}</strong></td>
+      <td style="font-size:12px">${c.info.type||'—'}</td>
+      <td style="font-size:12px">${c.info.district||'—'}</td>
+      <td style="font-size:12px">${c.info.office||'—'}</td>
+      <td style="font-size:12px">${c.info.date||'—'}</td>
+      <td style="text-align:center">${pill(s.p1)}</td>
+      <td style="text-align:center">${pill(s.p2)}</td>
+      <td style="text-align:center">${pill(s.p3)}</td>
+      <td style="text-align:center">${pill(s.p4)}</td>
+      <td style="text-align:center"><span class="pill-score ${lvlCls(ov)}" style="font-size:12px;">${ov.toFixed(2)} · ${lvl(ov)}</span></td>
+      <td>
+        <div class="table-actions">
+          <button class="btn btn-ghost btn-sm" onclick="editCoop('${c.id}')">✏️ แก้ไข</button>
+          <button class="btn btn-ghost btn-sm" onclick="viewResult('${c.id}')">📊 ผล</button>
+          <button class="btn btn-ruby btn-sm" onclick="confirmDel('${c.id}')">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  refreshSidebarCoopList();
+}
+
+function refreshSidebarCoopList() {
+  const el = document.getElementById('sidebar-coop-list');
+  if(db.coops.length===0){ el.innerHTML=''; return; }
+  const typeEmoji = t => ({'สหกรณ์การเกษตร':'🌾','สหกรณ์ประมง':'🐟','สหกรณ์นิคม':'🏘️','กลุ่มเกษตรกร':'👨‍🌾','สหกรณ์ร้านค้า':'🏪','สหกรณ์บริการ':'🔧','สหกรณ์ออมทรัพย์':'💰','เครดิตยูเนี่ยน':'🤝'}[t]||'🏛️');
+  el.innerHTML = db.coops.map(c=>{
+    const sc = c.scores?.overall||0;
+    const cls = cur===c.id ? 'coop-item active-coop' : 'coop-item';
+    return `<div class="${cls}" onclick="editCoop('${c.id}')">
+      <div class="coop-avatar">${typeEmoji(c.info.type)}</div>
+      <div class="coop-info">
+        <div class="coop-name">${c.info.name||'(ไม่มีชื่อ)'}</div>
+        <span class="coop-score-pill ${lvlCls(sc)}">${sc.toFixed(2)} ${lvl(sc)}</span>
+      </div>
+      <span class="coop-del" title="ลบ" onclick="event.stopPropagation();confirmDel('${c.id}')">✕</span>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════
+// FORM
+// ═══════════════════════════════════════════════════════
+function startNew() {
+  cur = newId();
+  db.coops.push({ id:cur, info:{}, answers:{}, scores:{} });
+  loadFormFromCoop(cur);
+  showView('form');
+  goStep(1);
+}
+
+function editCoop(id) {
+  cur = id;
+  loadFormFromCoop(id);
+  showView('form');
+  goStep(1);
+}
+
+function loadFormFromCoop(id) {
+  const c = getCoop(id);
+  if(!c) return;
+  const info = c.info||{};
+  document.getElementById('f-name').value     = info.name||'';
+  document.getElementById('f-auditor').value  = info.auditor||'';
+  document.getElementById('f-district').value = info.district||'';
+  document.getElementById('f-office').value   = info.office||'';
+  document.getElementById('f-date').value     = info.date||'';
+  document.getElementById('f-evaldate').value = info.evaldate||new Date().toISOString().slice(0,10);
+  document.querySelectorAll('.type-btn').forEach(b=>{
+    b.classList.toggle('sel', b.textContent.trim()===info.type);
+  });
+  p2ActiveSec = 'finance';
+}
+
+function selType(el, t) {
+  document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('sel'));
+  el.classList.add('sel');
+  if(cur) getCoop(cur).info.type = t;
+}
+
+function collectInfo() {
+  if(!cur) return;
+  const c = getCoop(cur);
+  c.info.name     = document.getElementById('f-name').value.trim();
+  c.info.auditor  = document.getElementById('f-auditor').value.trim();
+  c.info.district = document.getElementById('f-district').value.trim();
+  c.info.office   = document.getElementById('f-office').value.trim();
+  c.info.date     = document.getElementById('f-date').value;
+  c.info.evaldate = document.getElementById('f-evaldate').value;
+  const selBtn = document.querySelector('.type-btn.sel');
+  if(selBtn) c.info.type = selBtn.textContent.trim();
+}
+
+function goStep(n) {
+  collectInfo();
+  curStep = n;
+  [1,2,3,4].forEach(i=>{
+    document.getElementById('step-'+i).style.display = i===n?'block':'none';
+    const sp = document.getElementById('sp'+i);
+    sp.className = 'step-pill' + (i===n?' sp-active':i<n?' sp-done':'');
+  });
+  if(n===2) renderP1();
+  if(n===3) renderP2();
+  if(n===4) renderP34();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ─── Part 1 ───
+function renderP1() {
+  const c = getCoop(cur);
+  const ans = c?.answers||{};
+  let html = '';
+  P1.forEach((grp,gi)=>{
+    html += `<div class="q-group"><div class="q-group-title">📌 ${grp.g}</div>`;
+    grp.qs.forEach((q,qi)=>{
+      const k=`p1_${gi}_${qi}`, v=ans[k]||'';
+      html += `<div class="q-row">
+        <div class="q-text">${q}</div>
+        <div class="tri-group">
+          <button class="tri-yes ${v==='yes'?'t-yes':''}" onclick="setAns('${k}','yes',this,'p1')">ใช่</button>
+          <button class="tri-no ${v==='no'?'t-no':''}"  onclick="setAns('${k}','no',this,'p1')">ไม่ใช่</button>
+          <button class="tri-na ${v==='na'?'t-na':''}"  onclick="setAns('${k}','na',this,'p1')">ไม่มี</button>
+        </div>
+      </div>`;
+    });
+    html += `</div>`;
+  });
+  document.getElementById('p1-body').innerHTML = html;
+  updateBadge('p1');
+}
+
+async function setAns(k, v, btn, part) {
+  if(!cur) return;
+  const c = getCoop(cur);
+  if(!c.answers) c.answers={};
+  c.answers[k] = v;
+  await saveDB();
+  // reset ทุกปุ่มในกลุ่ม โดยเอา selected class ออก แต่คง base class ไว้
+  const row = btn.closest('.q-row');
+  row.querySelectorAll('.tri-yes').forEach(b => b.classList.remove('t-yes'));
+  row.querySelectorAll('.tri-no') .forEach(b => b.classList.remove('t-no'));
+  row.querySelectorAll('.tri-na') .forEach(b => b.classList.remove('t-na'));
+  // set selected class
+  if(v==='yes') btn.classList.add('t-yes');
+  else if(v==='no') btn.classList.add('t-no');
+  else btn.classList.add('t-na');
+  updateBadge(part);
+}
+
+function updateBadge(part) {
+  const c = getCoop(cur); if(!c) return;
+  const ans = c.answers||{};
+  if(part==='p1') {
+    const s=scoreYN(ans,'p1_');
+    document.getElementById('badge-p1').textContent = `${s.toFixed(2)} · ${lvl(s)}`;
+  }
+  if(part==='p2') {
+    const s=scoreP2Overall(ans);
+    document.getElementById('badge-p2').textContent = `${s.toFixed(2)} · ${lvl(s)}`;
+  }
+  if(part==='p3'||part==='p4') {
+    const s3=scoreYN(ans,'p3_'), s4=scoreYN(ans,'p4_');
+    document.getElementById('badge-p34').textContent = `${((s3+s4)/2).toFixed(2)} · ${lvl((s3+s4)/2)}`;
+  }
+}
+
+// ─── Part 2 ───
+function renderP2() {
+  const c = getCoop(cur);
+  const ans = c?.answers||{};
+
+  // tabs
+  let tabsHtml='';
+  P2S.forEach(s=>{
+    const hasSome = Object.keys(ans).some(k=>k.startsWith('p2_'+s.id+'_'));
+    tabsHtml += `<button class="sub-tab ${p2ActiveSec===s.id?'st-active':hasSome?'st-done':''}" onclick="setP2Sec('${s.id}')">${s.label}</button>`;
+  });
+  document.getElementById('p2-tabs').innerHTML = tabsHtml;
+
+  let html='';
+  P2S.forEach(sec=>{
+    const sr = scoreP2Sec(ans,sec.id);
+    const pct = sr?.pct||0;
+    html += `<div class="subsec ${p2ActiveSec===sec.id?'active':''}" id="p2s-${sec.id}">`;
+    html += `<div class="sec-progress">
+      <span class="prog-label">${sec.label}</span>
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct*100}%"></div></div>
+      <span class="prog-val">${pct.toFixed(2)} · ${sr?lvl(pct):'ยังไม่ประเมิน'}</span>
+    </div>`;
+    html += `<div class="notice">💡 เลือก N/A สำหรับรายการที่สหกรณ์ไม่มีธุรกิจนี้</div>`;
+    sec.groups.forEach((grp,gi)=>{
+      html += `<div class="q-group"><div class="q-group-title">📌 ${grp.n}</div>`;
+      grp.qs.forEach((q,qi)=>{
+        const k=`p2_${sec.id}_${gi}_${qi}`, v=ans[k];
+        html += `<div class="score-row">
+          <div class="score-text">${q}</div>
+          <div class="score-group">
+            <button class="s-btn s0 ${v===0?'on':''}" onclick="setScore('${k}',0)">0</button>
+            <button class="s-btn s1 ${v===1?'on':''}" onclick="setScore('${k}',1)">1</button>
+            <button class="s-btn s2 ${v===2?'on':''}" onclick="setScore('${k}',2)">2</button>
+            <button class="s-btn s3 ${v===3?'on':''}" onclick="setScore('${k}',3)">3</button>
+            <button class="s-btn sna ${v==='na'?'on':''}" onclick="setScore('${k}','na')">N/A</button>
+          </div>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div>`;
+  });
+  document.getElementById('p2-body').innerHTML = html;
+  updateBadge('p2');
+}
+
+function setP2Sec(id) {
+  p2ActiveSec = id;
+  renderP2();
+}
+
+async function setScore(k, v) {
+  if(!cur) return;
+  const c = getCoop(cur);
+  if(!c.answers) c.answers={};
+  c.answers[k] = v;
+  await saveDB();
+  renderP2();
+}
+
+// ─── Part 3+4 ───
+function renderP34() {
+  const c = getCoop(cur);
+  const ans = c?.answers||{};
+  let html='';
+
+  const buildYN = (data, prefix, partLabel, part) => {
+    let h=`<div style="background:linear-gradient(135deg,var(--ink),var(--ink-soft));color:white;padding:14px 18px;border-radius:10px;font-family:'Noto Serif Thai', 'TH Sarabun New', 'Leelawadee UI', 'Segoe UI', serif;font-weight:700;font-size:14px;margin-bottom:12px;">${partLabel}</div>`;
+    data.forEach((grp,gi)=>{
+      h += `<div class="q-group"><div class="q-group-title">📌 ${grp.g}</div>`;
+      grp.qs.forEach((q,qi)=>{
+        const k=`${prefix}_${gi}_${qi}`, v=ans[k]||'';
+        h += `<div class="q-row">
+          <div class="q-text">${q}</div>
+          <div class="tri-group">
+            <button class="tri-yes ${v==='yes'?'t-yes':''}" onclick="setAns('${k}','yes',this,'${part}')">ใช่</button>
+            <button class="tri-no ${v==='no'?'t-no':''}"  onclick="setAns('${k}','no',this,'${part}')">ไม่ใช่</button>
+            <button class="tri-na ${v==='na'?'t-na':''}"  onclick="setAns('${k}','na',this,'${part}')">ไม่มี</button>
+          </div>
+        </div>`;
+      });
+      h += `</div>`;
+    });
+    return h;
+  };
+
+  html += buildYN(P3,'p3','📡 ส่วนที่ 3 · ระบบข้อมูลสารสนเทศและการสื่อสาร','p3');
+  html += `<div style="margin-top:24px;"></div>`;
+  html += buildYN(P4,'p4','📈 ส่วนที่ 4 · การประเมินระบบการติดตามและประเมินผล','p4');
+  document.getElementById('p34-body').innerHTML = html;
+  updateBadge('p3');
+}
+
+// ─── Save & Score ───
+async function saveCoop() {
+  if(!cur) return;
+  collectInfo();
+  const c = getCoop(cur);
+  if(!c.info.name) { alert('กรุณาระบุชื่อสหกรณ์ก่อนบันทึก'); goStep(1); return; }
+  if(!c.info.office) { alert('กรุณาระบุสำนักงานสหกรณ์จังหวัดหรือสำนักงานส่งเสริมสหกรณ์ก่อนบันทึก'); goStep(1); return; }
+  c.scores = calcScores(c.answers||{});
+  c.savedAt = new Date().toISOString();
+  await saveDB();
+  refreshDash();
+  viewResult(cur);
+  showView('result');
+}
+
+// ═══════════════════════════════════════════════════════
+// RESULT VIEW
+// ═══════════════════════════════════════════════════════
+function viewResult(id) {
+  cur = id;
+  const c = getCoop(id);
+  if(!c||!c.scores) {
+    document.getElementById('result-empty').style.display='';
+    document.getElementById('result-content').style.display='none';
+    showView('result'); return;
+  }
+  document.getElementById('result-empty').style.display='none';
+  document.getElementById('result-content').style.display='';
+
+  const s = c.scores;
+  document.getElementById('result-hero').innerHTML = `
+    <h3 style="position:relative">ผลการประเมินชั้นคุณภาพการควบคุมภายใน (ภาพรวม)<br>
+    <span style="font-size:12px;opacity:.6;">${c.info.name||''} · ${c.info.type||''} · อ.${c.info.district||''}</span></h3>
+    <div class="hero-score" style="position:relative">${s.overall.toFixed(2)}</div>
+    <div class="hero-level" style="position:relative">${lvl(s.overall)}</div>
+    <div class="hero-desc" style="position:relative">${lvlDesc(s.overall)}</div>
+    <div style="position:relative;margin-top:16px;">
+      <button class="btn btn-gold btn-sm" onclick="showView('report');buildReport('${id}')">🖨️ พิมพ์รายงาน RQ 2</button>
+    </div>`;
+
+  const parts = [
+    {label:'ส่วนที่ 1 · สภาพแวดล้อม', score:s.p1, color:'#1d6fa4'},
+    {label:'ส่วนที่ 2 · ความเสี่ยง+ควบคุม', score:s.p2, color:'#c96a00'},
+    {label:'ส่วนที่ 3 · ระบบสารสนเทศ', score:s.p3, color:'#1a6b55'},
+    {label:'ส่วนที่ 4 · ติดตาม+ประเมินผล', score:s.p4, color:'#7c3aed'},
+  ];
+  document.getElementById('result-parts').innerHTML = parts.map(p=>`
+    <div class="rp-card">
+      <div class="rp-label">${p.label}</div>
+      <div class="rp-score">${p.score.toFixed(2)}</div>
+      <div class="rp-bar"><div class="rp-fill" style="width:${p.score*100}%;background:${p.color}"></div></div>
+      <span class="rp-level ${lvlCls(p.score)}">${lvl(p.score)}</span>
+    </div>`).join('');
+
+  showView('result');
+  buildReport(id);
+}
+
+function lvlDesc(s) {
+  if(s>0.95) return 'สหกรณ์มีระบบการควบคุมภายในที่มีประสิทธิภาพสูง ดำเนินงานได้อย่างมีระบบและโปร่งใส';
+  if(s>0.80) return 'สหกรณ์มีระบบการควบคุมภายในที่ดี มีข้อบกพร่องเล็กน้อยที่ควรปรับปรุง';
+  if(s>0.60) return 'ระบบการควบคุมภายในอยู่ในระดับที่ยอมรับได้ แต่ยังมีจุดที่ต้องพัฒนา';
+  if(s>0.45) return 'มีความเสี่ยงที่ต้องให้ความสนใจ ควรดำเนินการปรับปรุงโดยเร็ว';
+  return 'ระบบการควบคุมภายในมีข้อบกพร่องร้ายแรง จำเป็นต้องได้รับการแก้ไขโดยเร่งด่วน';
+}
+
+// ═══════════════════════════════════════════════════════
+// REPORT VIEW
+// ═══════════════════════════════════════════════════════
+function buildReport(id) {
+  cur = id;
+  const c = getCoop(id);
+  if(!c||!c.scores) {
+    document.getElementById('report-empty').style.display='';
+    document.getElementById('report-content').style.display='none';
+    return;
+  }
+  document.getElementById('report-empty').style.display='none';
+  document.getElementById('report-content').style.display='';
+
+  const s = c.scores; const info = c.info;
+  const pill = (sc,big) => `<span class="pill-score ${lvlCls(sc)}" style="font-size:${big?'13':'11'}px">${sc.toFixed(2)} · ${lvl(sc)}</span>`;
+
+  // Build p2 sub-scores
+  const ans = c.answers||{};
+  const p2rows = P2S.map(sec=>{
+    const sr = scoreP2Sec(ans,sec.id);
+    if(!sr) return `<tr><td style="padding:8px 14px 8px 28px;color:var(--text-muted);font-size:12px;">${sec.label}</td><td style="text-align:center;font-size:12px;color:var(--text-muted);">ไม่มีธุรกิจ</td></tr>`;
+    return `<tr><td style="padding:8px 14px 8px 28px;font-size:13px;">${sec.label}</td><td style="text-align:center">${pill(sr.pct,false)}</td></tr>`;
+  }).join('');
+
+  const html = `
+  <div style="max-width:800px;margin:0 auto;">
+    <div class="form-card">
+      <div class="form-card-head">
+        <span style="font-size:20px">📄</span>
+        <h3>รายงานผลการประเมินชั้นคุณภาพการควบคุมภายในสหกรณ์</h3>
+      </div>
+      <div class="form-card-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;padding:16px;background:var(--mist);border-radius:8px;font-size:13px;">
+          <div><span style="color:var(--text-muted);font-size:11px;text-transform:uppercase;font-weight:700;">ชื่อสหกรณ์ / กลุ่มเกษตรกร</span><br><strong>${info.name||'—'}</strong></div>
+          <div><span style="color:var(--text-muted);font-size:11px;text-transform:uppercase;font-weight:700;">ประเภทสหกรณ์</span><br>${info.type||'—'}</div>
+          <div style="grid-column:1/-1"><span style="color:var(--text-muted);font-size:11px;text-transform:uppercase;font-weight:700;">สำนักงานสหกรณ์จังหวัด / สำนักงานส่งเสริมสหกรณ์กรุงเทพมหานคร</span><br><strong>${info.office||'—'}</strong></div>
+          <div><span style="color:var(--text-muted);font-size:11px;text-transform:uppercase;font-weight:700;">อำเภอ / เขต ที่ตั้งสหกรณ์</span><br>${info.district||'—'}</div>
+          <div><span style="color:var(--text-muted);font-size:11px;text-transform:uppercase;font-weight:700;">ผู้ประเมิน (นักวิชาการสหกรณ์)</span><br>${info.auditor||'—'}</div>
+          <div><span style="color:var(--text-muted);font-size:11px;text-transform:uppercase;font-weight:700;">สำหรับปีบัญชีสิ้นสุด</span><br>${info.date||'—'}</div>
+          <div><span style="color:var(--text-muted);font-size:11px;text-transform:uppercase;font-weight:700;">วันที่ประเมิน</span><br>${info.evaldate||'—'}</div>
+        </div>
+
+        <table class="rq2-table">
+          <thead><tr><th>รายการ</th><th style="text-align:center;width:200px">ผลการประเมิน</th></tr></thead>
+          <tbody>
+            <tr><td style="font-weight:700">ส่วนที่ 1 · สภาพแวดล้อมการควบคุม</td><td style="text-align:center">${pill(s.p1,false)}</td></tr>
+            <tr><td style="font-weight:700">ส่วนที่ 2 · ความเสี่ยงและกิจกรรมควบคุม</td><td style="text-align:center">${pill(s.p2,false)}</td></tr>
+            ${p2rows}
+            <tr><td style="font-weight:700">ส่วนที่ 3 · ระบบข้อมูลสารสนเทศและการสื่อสาร</td><td style="text-align:center">${pill(s.p3,false)}</td></tr>
+            <tr><td style="font-weight:700">ส่วนที่ 4 · ระบบการติดตามและประเมินผล</td><td style="text-align:center">${pill(s.p4,false)}</td></tr>
+          </tbody>
+          <tfoot>
+            <tr class="rq2-total">
+              <td style="padding:14px 14px">สรุปผลการประเมินชั้นคุณภาพการควบคุมภายในอยู่ในระดับ</td>
+              <td style="text-align:center;font-size:18px;padding:14px">${s.overall.toFixed(2)} · ${lvl(s.overall)}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <div style="margin-top:20px;padding:12px 16px;background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;font-size:12px;color:var(--jade)">
+          <strong>เกณฑ์มาตรฐาน 5 ระดับ:</strong>&nbsp;
+          > 0.95 = ดีมาก &nbsp;|&nbsp; 0.80–0.95 = ดี &nbsp;|&nbsp; 0.60–0.80 = พอใช้ &nbsp;|&nbsp; 0.45–0.60 = ควรปรับปรุง &nbsp;|&nbsp; ≤ 0.45 = ต้องแก้ไข
+        </div>
+
+        <div style="margin-top:20px;display:flex;justify-content:space-between;font-size:13px;color:var(--text-soft);">
+          <div>ผู้ประเมิน (นักวิชาการสหกรณ์): <strong>${info.auditor||'—'}</strong></div>
+          <div>วันที่ประเมิน: ${info.evaldate||'—'}</div>
+        </div>
+
+        <div class="btn-row" style="margin-top:16px;">
+          <button class="btn btn-ghost btn-sm" onclick="editCoop('${id}');goStep(1)">✏️ แก้ไขข้อมูล</button>
+          <button class="btn btn-jade btn-sm" onclick="exportCoopCSV('${id}')">📄 Export CSV</button>
+          <button class="btn btn-jade btn-sm" onclick="exportCoopGSheet('${id}')">📊 Google Sheets</button>
+          <button class="btn btn-ink btn-sm" onclick="window.print()">🖨️ พิมพ์รายงาน</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+
+  document.getElementById('report-content').innerHTML = html;
+}
+
+// ═══════════════════════════════════════════════════════
+// DELETE / MODAL
+// ═══════════════════════════════════════════════════════
+let pendingDel = null;
+function confirmDel(id) {
+  const c = getCoop(id);
+  pendingDel = id;
+  document.getElementById('modal-title').textContent = 'ลบข้อมูลสหกรณ์';
+  document.getElementById('modal-body').textContent  = `ต้องการลบ "${c?.info?.name||'สหกรณ์นี้'}" ออกจากระบบหรือไม่? ข้อมูลทั้งหมดจะถูกลบถาวร`;
+  document.getElementById('modal-confirm').onclick = ()=>{ doDelete(); closeModal(); };
+  document.getElementById('modal').classList.add('open');
+}
+async function doDelete() {
+  db.coops = db.coops.filter(c=>c.id!==pendingDel);
+  if(cur===pendingDel) cur=null;
+  await saveDB(); refreshDash();
+}
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  pendingDel = null;
+}
+
+// ═══════════════════════════════════════════════════════
+// EXPORT — CSV & GOOGLE SHEETS (ไม่ต้องการ library ใดเลย)
+// ═══════════════════════════════════════════════════════
+
+// ── helper: แปลงแถวเป็น CSV line ──
+function toCSVLine(arr) {
+  return arr.map(v => {
+    const s = (v==null ? '' : String(v)).replace(/"/g,'""');
+    return `"${s}"`;
+  }).join(',');
+}
+
+// ── helper: ดาวน์โหลด blob ──
+function dlBlob(content, filename, mime) {
+  const bom  = mime.includes('csv') ? '\uFEFF' : ''; // BOM สำหรับ Excel อ่าน CSV ภาษาไทยได้
+  const blob = new Blob([bom + content], { type: mime });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── helper: สร้างข้อมูลสรุปรายสหกรณ์ ──
+function coopSummaryRows(c) {
+  const s = c.scores||{}, info = c.info||{}, ans = c.answers||{};
+  const rows = [];
+  rows.push(['ชื่อสหกรณ์/กลุ่มเกษตรกร', info.name||'']);
+  rows.push(['ประเภทสหกรณ์', info.type||'']);
+  rows.push(['สำนักงานสหกรณ์จังหวัด/สสท.', info.office||'']);
+  rows.push(['อำเภอ/เขต', info.district||'']);
+  rows.push(['ผู้ประเมิน', info.auditor||'']);
+  rows.push(['วันที่ประเมิน', info.evaldate||'']);
+  rows.push(['ปีบัญชีสิ้นสุด', info.date||'']);
+  rows.push([]);
+  rows.push(['ส่วน', 'คะแนน', 'ระดับคุณภาพ']);
+  rows.push(['ส่วนที่ 1 · สภาพแวดล้อมการควบคุม', s.p1!=null?s.p1.toFixed(4):'', s.p1!=null?lvl(s.p1):'']);
+  rows.push(['ส่วนที่ 2 · ความเสี่ยงและกิจกรรมควบคุม', s.p2!=null?s.p2.toFixed(4):'', s.p2!=null?lvl(s.p2):'']);
+  // sub-scores ส่วนที่ 2
+  P2S.forEach(sec => {
+    const sr = scoreP2Sec(ans, sec.id);
+    rows.push([`  · ${sec.label}`, sr?sr.pct.toFixed(4):'N/A', sr?lvl(sr.pct):'ไม่มีธุรกิจ']);
+  });
+  rows.push(['ส่วนที่ 3 · ระบบข้อมูลสารสนเทศและการสื่อสาร', s.p3!=null?s.p3.toFixed(4):'', s.p3!=null?lvl(s.p3):'']);
+  rows.push(['ส่วนที่ 4 · การติดตามและประเมินผล', s.p4!=null?s.p4.toFixed(4):'', s.p4!=null?lvl(s.p4):'']);
+  rows.push([]);
+  rows.push(['ผลรวม (ภาพรวม)', s.overall!=null?s.overall.toFixed(4):'', s.overall!=null?lvl(s.overall):'']);
+  return rows;
+}
+
+// ── helper: สร้างข้อมูลคำตอบรายข้อ ──
+function coopDetailRows(c) {
+  const ans = c.answers||{};
+  const rows = [];
+  const vTh = v => v==='yes'?'ใช่': v==='no'?'ไม่ใช่': v==='na'?'ไม่มีกิจกรรม':'(ยังไม่ตอบ)';
+
+  rows.push(['ส่วน','ปัจจัย/กลุ่มความเสี่ยง','ข้อที่','รายการประเมิน','คำตอบ/ระดับ']);
+
+  // ส่วนที่ 1
+  P1.forEach((grp,gi) => {
+    grp.qs.forEach((q,qi) => {
+      rows.push(['ส่วนที่ 1', grp.g, qi+1, q, vTh(ans[`p1_${gi}_${qi}`])]);
+    });
+  });
+
+  // ส่วนที่ 2
+  P2S.forEach(sec => {
+    sec.groups.forEach((grp,gi) => {
+      grp.qs.forEach((q,qi) => {
+        const v = ans[`p2_${sec.id}_${gi}_${qi}`];
+        const vStr = v==='na'?'N/A (ไม่มี)': v!==undefined?`${v} — ${['ไม่มีระดับ','ต้องปรับปรุง','ดีพอสมควร','ดี'][v]||v}`:'(ยังไม่ตอบ)';
+        rows.push([`ส่วนที่ 2 · ${sec.label}`, grp.n, qi+1, q, vStr]);
+      });
+    });
+  });
+
+  // ส่วนที่ 3
+  P3.forEach((grp,gi) => {
+    grp.qs.forEach((q,qi) => {
+      rows.push(['ส่วนที่ 3', grp.g, qi+1, q, vTh(ans[`p3_${gi}_${qi}`])]);
+    });
+  });
+
+  // ส่วนที่ 4
+  P4.forEach((grp,gi) => {
+    grp.qs.forEach((q,qi) => {
+      rows.push(['ส่วนที่ 4', grp.g, qi+1, q, vTh(ans[`p4_${gi}_${qi}`])]);
+    });
+  });
+
+  return rows;
+}
+
+// ════════════════════════════════════
+// 1) Export CSV — รายสหกรณ์
+// ════════════════════════════════════
+function exportCoopCSV(id) {
+  const c = getCoop(id);
+  if(!c||!c.scores){ alert('กรุณาบันทึกผลการประเมินก่อน'); return; }
+  const summaryRows = coopSummaryRows(c);
+  const detailRows  = coopDetailRows(c);
+  const allRows = [
+    ['=== สรุปผลการประเมิน ==='],
+    ...summaryRows,
+    [],
+    ['=== รายละเอียดคำตอบ ==='],
+    ...detailRows
+  ];
+  const csv = allRows.map(toCSVLine).join('\r\n');
+  const name = (c.info.name||'สหกรณ์').replace(/\s/g,'_');
+  dlBlob(csv, `ประเมินควบคุมภายใน_${name}_${c.info.date||'ไม่ระบุ'}.csv`, 'text/csv;charset=utf-8');
+}
+
+// ════════════════════════════════════
+// 2) Export CSV — ทุกสหกรณ์รวม
+// ════════════════════════════════════
+function exportAllCSV() {
+  if(db.coops.length===0){ alert('ยังไม่มีข้อมูลสหกรณ์'); return; }
+  const header = ['ชื่อสหกรณ์/กลุ่มเกษตรกร','ประเภท','อำเภอ/เขต','สำนักงาน สจ./สสท.',
+                  'ส่วนที่ 1','ส่วนที่ 2','ส่วนที่ 3','ส่วนที่ 4','คะแนนรวม','ระดับคุณภาพ'];
+  const rows = db.coops.map(c => {
+    const s = c.scores||{}, ov = s.overall||0;
+    return [
+      c.info.name||'', c.info.type||'', c.info.district||'', c.info.office||'',
+      s.p1!=null?s.p1.toFixed(4):'', s.p2!=null?s.p2.toFixed(4):'',
+      s.p3!=null?s.p3.toFixed(4):'', s.p4!=null?s.p4.toFixed(4):'',
+      ov.toFixed(4), lvl(ov)
+    ];
+  });
+  const csv = [header, ...rows].map(toCSVLine).join('\r\n');
+  dlBlob(csv, `สรุปประเมินควบคุมภายใน_${new Date().toISOString().slice(0,10)}.csv`, 'text/csv;charset=utf-8');
+}
+
+// ════════════════════════════════════
+// 3) Google Sheets — รายสหกรณ์
+// ════════════════════════════════════
+function exportCoopGSheet(id) {
+  const c = getCoop(id);
+  if(!c||!c.scores){ alert('กรุณาบันทึกผลการประเมินก่อน'); return; }
+  const summaryRows = coopSummaryRows(c);
+  const detailRows  = coopDetailRows(c);
+  const allRows = [
+    ['=== สรุปผลการประเมิน ==='],
+    ...summaryRows,
+    [],
+    ['=== รายละเอียดคำตอบ ==='],
+    ...detailRows
+  ];
+  const tsv  = allRows.map(r => r.join('\t')).join('\n');
+  const name = (c.info.name||'สหกรณ์').replace(/\s/g,'_');
+  dlBlob(tsv, `GSheet_${name}_${c.info.date||new Date().toISOString().slice(0,10)}.tsv`, 'text/tab-separated-values;charset=utf-8');
+  window.open('https://sheets.new', '_blank');
+  alert('✅ ดาวน์โหลดไฟล์ .tsv แล้ว และเปิด Google Sheets ใหม่ให้\n\nขั้นตอน:\n1. ใน Google Sheets → เมนู ไฟล์ → นำเข้า\n2. เลือกแท็บ "อัปโหลด" → เลือกไฟล์ .tsv ที่ดาวน์โหลดมา\n3. เลือกตัวคั่น: Tab → กด "นำเข้าข้อมูล"');
+}
+
+// ════════════════════════════════════
+// 4) Google Sheets — ทุกสหกรณ์รวม
+// ════════════════════════════════════
+function exportAllGSheet() {
+  if(db.coops.length===0){ alert('ยังไม่มีข้อมูลสหกรณ์'); return; }
+  const header = ['ชื่อสหกรณ์/กลุ่มเกษตรกร','ประเภท','อำเภอ/เขต','สำนักงาน สจ./สสท.',
+                  'ส่วนที่ 1','ส่วนที่ 2','ส่วนที่ 3','ส่วนที่ 4','คะแนนรวม','ระดับคุณภาพ'];
+  const rows = db.coops.map(c => {
+    const s = c.scores||{}, ov = s.overall||0;
+    return [
+      c.info.name||'', c.info.type||'', c.info.district||'', c.info.office||'',
+      s.p1!=null?s.p1.toFixed(4):'', s.p2!=null?s.p2.toFixed(4):'',
+      s.p3!=null?s.p3.toFixed(4):'', s.p4!=null?s.p4.toFixed(4):'',
+      ov.toFixed(4), lvl(ov)
+    ];
+  });
+  const tsv = [header, ...rows].map(r => r.join('\t')).join('\n');
+  dlBlob(tsv, `GSheet_สรุปทุกสหกรณ์_${new Date().toISOString().slice(0,10)}.tsv`, 'text/tab-separated-values;charset=utf-8');
+  window.open('https://sheets.new', '_blank');
+  alert('✅ ดาวน์โหลดไฟล์ .tsv แล้ว และเปิด Google Sheets ใหม่ให้\n\nขั้นตอน:\n1. ใน Google Sheets → เมนู ไฟล์ → นำเข้า\n2. เลือกแท็บ "อัปโหลด" → เลือกไฟล์ .tsv ที่ดาวน์โหลดมา\n3. เลือกตัวคั่น: Tab → กด "นำเข้าข้อมูล"');
+}
+// ═══════════════════════════════════════════════════════
+// EXPORT / IMPORT JSON
+// ═══════════════════════════════════════════════════════
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(db,null,2)], {type:'application/json'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'cpd_coop_eval_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click(); URL.revokeObjectURL(url);
+}
+function importClick() { document.getElementById('import-file').click(); }
+function importJSON(e) {
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = async ev => {
+    try {
+      const d = JSON.parse(ev.target.result);
+      if(d.coops && Array.isArray(d.coops)) {
+        if(confirm(`นำเข้าข้อมูล ${d.coops.length} สหกรณ์?\n(ข้อมูลเดิมทั้งหมดจะถูกแทนที่)`)) {
+          db = d; await saveDB(); refreshDash(); showView('dash');
+        }
+      } else alert('ไฟล์ไม่ถูกต้อง');
+    } catch { alert('อ่านไฟล์ไม่ได้'); }
+  };
+  r.readAsText(f);
+  e.target.value='';
+}
+
+// ═══════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════
+(async () => {
+  await loadDB();
+  refreshDash();
+  showView('dash');
+})();
+</script>
+</body>
+</html>
